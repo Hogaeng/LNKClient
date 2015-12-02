@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="LKN Messenger"
+        android:id="@+id/Logo"
+        android:textSize="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/IDText"
+        android:hint="Input ID"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/PWText"
+        android:layout_alignStart="@+id/PWText" />
+
+    <EditText
+        android:id="@+id/PWText"
+        android:hint="Input Password"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/LoginButton"
+        android:text="Log in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/PWText"
+        android:layout_alignStart="@+id/PWText"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="41dp" />
+
+    <Button
+        android:id="@+id/JoinButton"
+        android:text="Join"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/LoginButton"
+        android:layout_toEndOf="@+id/LoginButton" />
+
+
+</RelativeLayout>

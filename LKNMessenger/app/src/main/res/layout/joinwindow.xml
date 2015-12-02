@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/NameJoin"
+        android:text="Input Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/NameEdit"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/NameJoin"
+        android:layout_alignParentStart="true" />
+
+
+    <TextView
+        android:id="@+id/IDJoin"
+        android:text="Input ID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@+id/NameEdit"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/IDEdit"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/IDJoin"
+        android:layout_alignParentStart="true" />
+
+
+    <TextView
+        android:id="@+id/PWJoin"
+        android:text="Input Password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@+id/IDEdit"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/PWEdit"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/PWJoin"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/RepeatJoin"
+        android:text="Repeat Password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@+id/PWEdit"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/RepeatEdit"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RepeatJoin"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/JoinButton"
+        android:text="Join"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RepeatEdit"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/CancelButton"
+        android:text="Cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/JoinButton"
+        android:layout_toEndOf="@+id/JoinButton" />
+
+
+
+</RelativeLayout>
