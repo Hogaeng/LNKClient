@@ -93,12 +93,15 @@ public class PacketCodec {
 
 		return dst;
 	}
-	
+
 	public static String encodeLoginAck(LoginAck pk_data){
-		String data = Packet.LOG_REQ
-				+ Packet.FIELD_DELIM + pk_data.getAnswer()
-				+ Packet.FIELD_DELIM
-				+ Packet.PK_DELIM;
+		String data = Packet.LOG_ACK + Packet.FIELD_DELIM
+				+ Integer.toString(pk_data.getAnswer()) + Packet.FIELD_DELIM;
+
+      /*if (pk_data.getAnswer() == Packet.SUCCESS){
+      }*/
+
+		data += Packet.PK_DELIM;
 
 		return data;
 	}
@@ -107,7 +110,7 @@ public class PacketCodec {
 		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
 		LoginAck dst = new LoginAck();
 
-		dst.setAnswer(s.next());
+		dst.setAnswer(s.nextInt());
 
 		return dst;
 	}

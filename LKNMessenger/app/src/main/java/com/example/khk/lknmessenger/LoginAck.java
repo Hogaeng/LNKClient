@@ -4,12 +4,12 @@ package com.example.khk.lknmessenger;
  * Created by KHK on 2015-12-03.
  */
 public class LoginAck {
-    private String answer;
+    private int answer;
 
-    public String getAnswer() {
+    public int getAnswer() {
         return answer;
     }
-    public void setAnswer(String answer) {
+    public void setAnswer(int answer) {
         this.answer = answer;
     }
 }

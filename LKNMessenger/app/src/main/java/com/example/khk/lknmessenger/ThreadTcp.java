@@ -1,5 +1,8 @@
 package com.example.khk.lknmessenger;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -60,5 +63,33 @@ public class ThreadTcp implements Runnable{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	public boolean clienthandler(Packet src, PrintWriter out) throws IOException
+	{
+		boolean isContinuous = true;
+
+		switch(src.getType())
+		{
+			case Packet.LOG_ACK:
+				LoginAck l_ack = PacketCodec.decodeLoginAck(src.getData());
+				if(l_ack.getAnswer() == Packet.SUCCESS)
+					Log.d("Success","Login Success!");
+				else
+					Log.d("Fail", "Login Failed!");
+				break;
+
+			case Packet.JOIN_ACK:
+				break;
+
+			case Packet.MSS_ACK:
+				break;
+
+			default:
+				System.out.println("Not Defined Packet Type!!!!");
+
+		}
+		return isContinuous;
+
 	}
 }
