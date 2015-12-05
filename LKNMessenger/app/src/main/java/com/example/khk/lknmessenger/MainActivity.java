@@ -35,11 +35,6 @@ public class MainActivity extends Activity {
                 try {
                     SocketManager.getSocket();  //  connecting TCP socket to server
 
-                    SocketManager.sendMsg(sendMsg);   //  sending REQ to server
-                    Log.d("sendMsg in LA", sendMsg);
-                    recvMsg = SocketManager.receiveMsg();   //  receiving ACK from server
-                    Log.d( "recvMsg in LA", recvMsg );
-                    packet = PacketCodec.decodeHeader( recvMsg );
                     Toast.makeText(getBaseContext(), "Link Start!!",Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     Log.d("Link Failed","Link Failed...");

@@ -17,6 +17,7 @@ public class JoinActivity extends Activity {
     PendingIntent pendingIntent;
     Context mContext;
     EditText InputName,InputID,InputPW,InputRepeat;
+    String UserName,UserID,UserPW,UserRepeat;
     Button Join,Cancel;
     public void onCreate(Bundle savedInstanceState)
     {
@@ -32,10 +33,20 @@ public class JoinActivity extends Activity {
         Join = (Button)findViewById(R.id.JoinButton);
         Cancel = (Button)findViewById(R.id.CancelButton);
 
+        UserName = InputName.getText().toString();
+        UserID = InputID.getText().toString();
+        UserPW = InputPW.getText().toString();
+        UserRepeat = InputRepeat.getText().toString();
+
         Join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Toast.makeText(getBaseContext(),"Sorry, Cannot Developed",Toast.LENGTH_SHORT).show();
+                if(UserName == null || UserID == null|| UserPW == null || UserRepeat == null)
+                {
+
+                    Toast.makeText(getBaseContext(),"You didn't write some information",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

@@ -1,5 +1,6 @@
 package com.example.khk.lknmessenger;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Handler;
 import android.os.Message;
@@ -15,10 +16,11 @@ import java.net.Socket;
 /**
  * Created by KHK on 2015-12-05.
  */
-public class SocketManager {
+public class SocketManager extends Activity {
 
     public final static String HOST = "115.23.216.223";
     public final static int PORT = 9193;
+    //public static Thread worker;
 
     public static Socket socket;
     public static PrintWriter socket_out;
@@ -47,6 +49,7 @@ public class SocketManager {
              *  including socket thread, in main thread. So we have to
              *  create other threads for executing these thread tasks.  */
             public void run() {
+                //super.run();
                 if (socket == null )
                     socket = new Socket();
                 if( !socket.isConnected() )
@@ -55,9 +58,11 @@ public class SocketManager {
                         socket_in = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
                         socket_out = new PrintWriter( socket.getOutputStream(), true );
                         isConnected = true;
+                        //throw new IOException();
                         //  allocating variables about socket
                    } catch ( IOException e ) {
-                     Log.d("Access Faild", "Access Failed!");
+
+                        //e.printStackTrace();
                     }
             }
         };

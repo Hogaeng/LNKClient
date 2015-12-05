@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class PacketCodec {
+
 	public static String readDelimiter(BufferedReader in) throws IOException{
 		char charBuf[] = new char[1];
 		String readMsg = "";
@@ -12,7 +13,7 @@ public class PacketCodec {
 		int size = 1, totalSize = 0;
 		boolean isFirstDelimAppear = false;
 		String strSize = "";
-		
+
 		// read character before packet delimiter
 		while(in.read(charBuf, 0, 1) != -1){
 			if(!isFirstDelimAppear){
@@ -42,7 +43,7 @@ public class PacketCodec {
 				continue;
 			}
 		}
-		
+
 		// remove '\n'
 		while(in.read(charBuf, 0, 1) != -1)
 		{
@@ -50,37 +51,55 @@ public class PacketCodec {
 				break;
 			}
 		}
-		
+
 		// if there isn't delimiter
 		if(isdelim == 0 && charBuf[0]  != '\0'){
 			System.out.println("MSG DELIM IS NOT FOUND!!");
 		}
 		return readMsg;
 	}
-	
 
-	public static Packet decodeHeader(String src) throws IOException{
+
+	public static Packet decodeHeader(BufferedReader in) throws IOException{
 		String type, data;
-		int size;
+		char charBuf[] = new char[1];
+		String src = "";
+		if(in==null)
+			return null;
+		while(in.read(charBuf, 0, 1) != -1)
+		{
+			src += charBuf[0];
+		}
 		Scanner s = new Scanner(src).useDelimiter("\\"+Packet.FIELD_DELIM);
-		
+
 		type = s.next();
 		s.skip(Packet.FIELD_DELIM);
-		
 		s.useDelimiter("\\"+Packet.PK_DELIM);
 		data = s.next();
-		
+
 		return new Packet(type, data);
 	}
-	
 
-	public static String encodeLoginReq(LoginReq pk_data){
-		String data = Packet.LOG_REQ 
+	// About join request
+	// Dncode join request packet data
+	public static String encodeJoinReq(JoinReq pk_data){
+		String data = Packet.JOIN_REQ
+				+ Packet.FIELD_DELIM + pk_data.getName()
 				+ Packet.FIELD_DELIM + pk_data.getId()
 				+ Packet.FIELD_DELIM + pk_data.getPassword()
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
-		
+
+		return data;
+	}
+
+	public static String encodeLoginReq(LoginReq pk_data){
+		String data = Packet.LOG_REQ
+				+ Packet.FIELD_DELIM + pk_data.getId()
+				+ Packet.FIELD_DELIM + pk_data.getPassword()
+				+ Packet.FIELD_DELIM
+				+ Packet.PK_DELIM;
+
 		return data;
 	}
 
@@ -98,8 +117,8 @@ public class PacketCodec {
 		String data = Packet.LOG_ACK + Packet.FIELD_DELIM
 				+ Integer.toString(pk_data.getAnswer()) + Packet.FIELD_DELIM;
 
-      /*if (pk_data.getAnswer() == Packet.SUCCESS){
-      }*/
+		/*if (pk_data.getAnswer() == Packet.SUCCESS){
+		}*/
 
 		data += Packet.PK_DELIM;
 
@@ -115,30 +134,17 @@ public class PacketCodec {
 		return dst;
 	}
 
-	// About join request
-	// Dncode join request packet data
-	public static String encodeJoinReq(JoinReq pk_data){
-		String data = Packet.JOIN_REQ
-				+ Packet.FIELD_DELIM + pk_data.getName()
-				+ Packet.FIELD_DELIM + pk_data.getId()
-				+ Packet.FIELD_DELIM + pk_data.getPassword()
+	public static String encodeMssReq(MssReq pk_data){
+		String data = Packet.MSS_REQ
+				+ Packet.FIELD_DELIM + pk_data.getMessage()
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
 
 		return data;
 	}
 
-	public static String encodeMssReq(MssReq pk_data){
-		String data = Packet.MSS_REQ 
-				+ Packet.FIELD_DELIM + pk_data.getMessage()
-				+ Packet.FIELD_DELIM
-			    + Packet.PK_DELIM;
-		
-		return data;
-	}
-	
-	
-	
+
+
 	// Decode join response packet data
 	/*public static JoinAck decodeJoinAck(String pk_data){
 		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
@@ -148,13 +154,13 @@ public class PacketCodec {
 		
 		return dst;
 	}*/
-	
+
 	// About login request
 	// Encode login request
-	
-	
-	
-	
+
+
+
+
 
 	// Decode login response packet data
 	/*public static LoginAck decodeLoginAck(String pk_data){
@@ -172,6 +178,6 @@ public class PacketCodec {
 		}
 		return dst;
 	}*/
-	
-	
+
+
 }

@@ -64,13 +64,23 @@ public class LoginActivity extends Activity{
 
                     else
                     {
-
                         UserID = IDText.getText().toString();
                         UserPW = PWText.getText().toString();
                         loginReq.setId(UserID);
                         loginReq.setPassword(UserPW);
                         sendMsg = PacketCodec.encodeLoginReq(loginReq);
+                        try {
+                            SocketManager.sendMsg(sendMsg);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            recvMsg = SocketManager.receiveMsg();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
+                        //(MainActivity.packet) = PacketCodec.decodeHeader(recvMsg);
                         loginAck = PacketCodec.decodeLoginAck((MainActivity.packet).getData());
                         //  analyzing the ACK sent from server
                         if( loginAck.getAnswer() == Packet.FAIL ) {

@@ -10,13 +10,14 @@ public class TcpServer {
 	private static Socket clientSocket = null;
 	private static final int PORT = 9193; // can use 9193 9194 9195
 	private static ThreadTcp threadServer = null;
-	
+
 	public static void main(String[] args) throws IOException{
+		System.out.println("Server is operating.....");
 		while(true)
 		{
 			serverSocket = new ServerSocket(PORT);
 			serverSocket.setReuseAddress(true);
-			
+
 			while(true) {
 				clientSocket = serverSocket.accept();
 				if(clientSocket != null){
@@ -26,6 +27,7 @@ public class TcpServer {
 					clientSocket = null;
 				}
 			}
-		}	
+		}
+
 	}
 }
