@@ -40,21 +40,22 @@ public class ThreadTcp implements Runnable {
 	}
 
 
-	public void run() {
-		try {
+	public void run(){
+		try{
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));//
 			out = new PrintWriter(clientSocket.getOutputStream(), true);
 
-			while (isContinous) {
+			while(isContinous){
 				rcvPacket = PacketCodec.decodeHeader(in);//
-				if (rcvPacket == null)
+				if(rcvPacket==null)
 					continue;
 				isContinous = clienthandler(rcvPacket, out);//
+				rcvPacket=null;
 			}//
 			in.close();
 			out.close();
 			clientSocket.close();//
-		} catch (Exception e) {
+		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
@@ -70,7 +71,7 @@ public class ThreadTcp implements Runnable {
 				LoginAck l_ack = PacketCodec.decodeLoginAck(src.getData());
 				if(l_ack.getAnswer() == Packet.SUCCESS)
 					Log.d("Success","Login Success!");
-				else
+				else if(l_ack.getAnswer() == Packet.FAIL)
 					Log.d("Fail", "Login Failed!");
 				break;
 

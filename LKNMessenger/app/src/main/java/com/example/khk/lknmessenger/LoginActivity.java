@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
@@ -21,9 +22,11 @@ public class LoginActivity extends Activity{
     PendingIntent pendingIntent;
     Context mContext;
     String UserID,UserPW;
-    String sendMsg="Send",recvMsg="Receive";
+    String sendMsg="Send";
+    BufferedReader recvMsg;
     EditText IDText,PWText;
     Button Login,Join;
+    Packet packet;
 
     private LoginReq loginReq;
     private LoginAck loginAck;
@@ -32,6 +35,7 @@ public class LoginActivity extends Activity{
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loginwindow);
+
         mContext = this.getApplicationContext();
 
         IDText = (EditText)findViewById(R.id.IDText);
@@ -50,6 +54,7 @@ public class LoginActivity extends Activity{
     private View.OnClickListener OnClickListener = new View.OnClickListener() {
         public void onClick( View view ) {
             int id = view.getId();
+
             switch(id)
             {
                 case R.id.LoginButton:    //  access(log in)
@@ -69,19 +74,20 @@ public class LoginActivity extends Activity{
                         loginReq.setId(UserID);
                         loginReq.setPassword(UserPW);
                         sendMsg = PacketCodec.encodeLoginReq(loginReq);
+
                         try {
+                            SocketManager.getSocket();
+                            Toast.makeText(getBaseContext(),"Link Start!!",Toast.LENGTH_SHORT).show();
                             SocketManager.sendMsg(sendMsg);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        try {
+                            Log.e("sendMsg", sendMsg);
                             recvMsg = SocketManager.receiveMsg();
+                            Log.e("recvMsg", "received!");
+                            packet = PacketCodec.decodeHeader(recvMsg);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
-                        //(MainActivity.packet) = PacketCodec.decodeHeader(recvMsg);
-                        loginAck = PacketCodec.decodeLoginAck((MainActivity.packet).getData());
+                        loginAck = PacketCodec.decodeLoginAck(packet.getData());
                         //  analyzing the ACK sent from server
                         if( loginAck.getAnswer() == Packet.FAIL ) {
 
@@ -97,10 +103,10 @@ public class LoginActivity extends Activity{
                         }
 
                     }
-
                     break;
 
                 case R.id.JoinButton:
+
                     Intent intent = new Intent();
                     intent.setClass(mContext,JoinActivity.class);
                     pendingIntent = PendingIntent.getActivity(mContext,0,intent,0);

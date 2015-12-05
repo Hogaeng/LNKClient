@@ -27,7 +27,7 @@ public class SocketManager extends Activity {
     public static BufferedReader socket_in;
     //  variables about socket
 
-    public static String result;
+    public static BufferedReader result;
     //  String variable received from the server
 
     public static boolean isConnected = false;
@@ -80,19 +80,15 @@ public class SocketManager extends Activity {
         socket_out.println( message );
     }
 
-    public static String receiveMsg() throws IOException {
+    public static BufferedReader receiveMsg() throws IOException {
         //  method for receiving a packet from the server
         Thread receiver = new Thread() {
             /*  Unlike sending to the server, receiving a data from the
              *  server needs thread tasking. So we have to create another
              *  thread for receiving from the server.   */
             public void run() {
-                try {
-                    result = PacketCodec.readDelimiter(socket_in);
-                    isGetEnd = true;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                result = socket_in;
+                isGetEnd = true;
             }
         };
         isGetEnd = false;

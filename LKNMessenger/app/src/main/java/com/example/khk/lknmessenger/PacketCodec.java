@@ -32,6 +32,7 @@ public class PacketCodec {
 					isFirstDelimAppear = true;
 				}
 			}
+
 			// Packet.PK_DELIM == '?'
 			else if(charBuf[0] == '?'){
 				readMsg += charBuf[0];
@@ -64,19 +65,23 @@ public class PacketCodec {
 		String type, data;
 		char charBuf[] = new char[1];
 		String src = "";
-		if(in==null)
-			return null;
+		System.out.println("Decode : step one");
 		while(in.read(charBuf, 0, 1) != -1)
 		{
 			src += charBuf[0];
+			System.out.println(src);
+			System.out.println("Decode : step two");
 		}
+		System.out.println("Decode : step three");
+		if(src.equals(""))
+			return null;
+		System.out.println("Decode : step four...");
 		Scanner s = new Scanner(src).useDelimiter("\\"+Packet.FIELD_DELIM);
 
 		type = s.next();
 		s.skip(Packet.FIELD_DELIM);
 		s.useDelimiter("\\"+Packet.PK_DELIM);
 		data = s.next();
-
 		return new Packet(type, data);
 	}
 

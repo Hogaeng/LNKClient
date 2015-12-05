@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
     Context mContext;
     Button StartButton;
     String sendMsg="Send",recvMsg="Receive";
-    public static Packet packet;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -32,13 +32,6 @@ public class MainActivity extends Activity {
         StartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    SocketManager.getSocket();  //  connecting TCP socket to server
-
-                    Toast.makeText(getBaseContext(), "Link Start!!",Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    Log.d("Link Failed","Link Failed...");
-                }
 
                 Intent intent = new Intent();
                 intent.setClass(mContext, LoginActivity.class);
