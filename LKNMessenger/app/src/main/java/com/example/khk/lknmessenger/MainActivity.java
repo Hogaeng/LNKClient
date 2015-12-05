@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
     PendingIntent pendingIntent;
@@ -27,6 +28,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(mContext,LoginActivity.class);
+                Toast.makeText(getBaseContext(), "Click!",Toast.LENGTH_SHORT).show();
                 pendingIntent = PendingIntent.getActivity(mContext,0,intent,0);
                 try
                 {
