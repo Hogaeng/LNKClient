@@ -5,16 +5,22 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 public class MainActivity extends Activity {
     PendingIntent pendingIntent;
     Context mContext;
     Button StartButton;
+    String sendMsg="Send",recvMsg="Receive";
+    public static Packet packet;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,9 +32,21 @@ public class MainActivity extends Activity {
         StartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    SocketManager.getSocket();  //  connecting TCP socket to server
+
+                    SocketManager.sendMsg(sendMsg);   //  sending REQ to server
+                    Log.d("sendMsg in LA", sendMsg);
+                    recvMsg = SocketManager.receiveMsg();   //  receiving ACK from server
+                    Log.d( "recvMsg in LA", recvMsg );
+                    packet = PacketCodec.decodeHeader( recvMsg );
+                    Toast.makeText(getBaseContext(), "Link Start!!",Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    Log.d("Link Failed","Link Failed...");
+                }
+
                 Intent intent = new Intent();
-                intent.setClass(mContext,LoginActivity.class);
-                Toast.makeText(getBaseContext(), "Click!",Toast.LENGTH_SHORT).show();
+                intent.setClass(mContext, LoginActivity.class);
                 pendingIntent = PendingIntent.getActivity(mContext,0,intent,0);
                 try
                 {

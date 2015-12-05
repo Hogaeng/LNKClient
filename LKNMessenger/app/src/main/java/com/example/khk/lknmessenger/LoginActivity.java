@@ -21,10 +21,10 @@ public class LoginActivity extends Activity{
     PendingIntent pendingIntent;
     Context mContext;
     String UserID,UserPW;
-    String sendMsg,recvMsg;
+    String sendMsg="Send",recvMsg="Receive";
     EditText IDText,PWText;
     Button Login,Join;
-    private Packet packet;
+
     private LoginReq loginReq;
     private LoginAck loginAck;
 
@@ -64,25 +64,14 @@ public class LoginActivity extends Activity{
 
                     else
                     {
+
                         UserID = IDText.getText().toString();
                         UserPW = PWText.getText().toString();
                         loginReq.setId(UserID);
                         loginReq.setPassword(UserPW);
                         sendMsg = PacketCodec.encodeLoginReq(loginReq);
 
-                        try {
-                            SocketManager.getSocket();  //  connecting TCP socket to server
-
-                            SocketManager.sendMsg( sendMsg );   //  sending REQ to server
-                            Log.d( "sendMsg in LA", sendMsg );
-                            recvMsg = SocketManager.receiveMsg();   //  receiving ACK from server
-                            Log.d( "recvMsg in LA", recvMsg );
-                            packet = PacketCodec.decodeHeader( recvMsg );
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        loginAck = PacketCodec.decodeLoginAck( packet.getData() );
+                        loginAck = PacketCodec.decodeLoginAck((MainActivity.packet).getData());
                         //  analyzing the ACK sent from server
                         if( loginAck.getAnswer() == Packet.FAIL ) {
 

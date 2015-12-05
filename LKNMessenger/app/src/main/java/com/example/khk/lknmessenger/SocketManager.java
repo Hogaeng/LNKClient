@@ -4,13 +4,11 @@ import android.app.ProgressDialog;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -20,7 +18,7 @@ import java.net.Socket;
 public class SocketManager {
 
     public final static String HOST = "115.23.216.223";
-    public final static int PORT = 9191;
+    public final static int PORT = 9193;
 
     public static Socket socket;
     public static PrintWriter socket_out;
@@ -53,13 +51,13 @@ public class SocketManager {
                     socket = new Socket();
                 if( !socket.isConnected() )
                     try {
-                        socket.connect( new InetSocketAddress( /*HOST*/InetAddress.getByName("sayaten.net").getHostAddress(), PORT ) );
+                        socket.connect( new InetSocketAddress(HOST, PORT) );
                         socket_in = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
                         socket_out = new PrintWriter( socket.getOutputStream(), true );
                         isConnected = true;
                         //  allocating variables about socket
-                    } catch ( IOException e ) {
-                        e.printStackTrace();
+                   } catch ( IOException e ) {
+                     Log.d("Access Faild", "Access Failed!");
                     }
             }
         };
