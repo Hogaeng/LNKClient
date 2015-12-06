@@ -41,11 +41,16 @@ public class JoinActivity extends Activity {
         Join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(UserName == null || UserID == null|| UserPW == null || UserRepeat == null)
+                if(UserName.equals("") == true || UserID.equals("") == true || UserPW.equals("") == true || UserRepeat.equals("") == true)
                 {
-
                     Toast.makeText(getBaseContext(),"You didn't write some information",Toast.LENGTH_SHORT).show();
+                    if(UserPW.equals(UserRepeat) == false)
+                    {
+                        Toast.makeText(getBaseContext(),"Wrong password",Toast.LENGTH_SHORT).show();
+                    }
                 }
+
+
 
             }
         });
@@ -60,6 +65,7 @@ public class JoinActivity extends Activity {
                 try
                 {
                     pendingIntent.send(mContext,0,intent);
+                    finish();
                 }
                 catch(PendingIntent.CanceledException e)
                 {

@@ -42,14 +42,19 @@ public class ThreadTcp implements Runnable {
 
 	public void run(){
 		try{
+			System.out.println("ThreadTcp run step zero");
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));//
 			out = new PrintWriter(clientSocket.getOutputStream(), true);
-
+			System.out.println("ThreadTcp run step one");
 			while(isContinous){
-				rcvPacket = PacketCodec.decodeHeader(in);//
-				if(rcvPacket==null)
+				inputData = PacketCodec.readBuffReader(in);
+				if(rcvPacket==null){
+
 					continue;
-				isContinous = clienthandler(rcvPacket, out);//
+				}
+				rcvPacket = PacketCodec.decodeHeader(inputData);//
+				System.out.println("ThreadTcp step four");
+				isContinous = handler(rcvPacket, out);//
 				rcvPacket=null;
 			}//
 			in.close();
@@ -61,31 +66,30 @@ public class ThreadTcp implements Runnable {
 	}
 
 
-	public boolean clienthandler(Packet src, PrintWriter out) throws IOException
+	public boolean handler(Packet src, PrintWriter out)throws IOException
 	{
-		boolean isContinuous = true;
+		String sendString;
+		switch(src.getType()){
+			case Packet.LOG_REQ:
+				System.out.println("Log REQ recevied.");
+				LoginReq lo_req = PacketCodec.decodeLoginReq(src.getData());
+				LoginAck lo_ack = new LoginAck();
+				if(lo_req.getId().equals("Android")&&lo_req.getPassword().equals("123456"))
+					lo_ack.setAnswer(Packet.SUCCESS);
+				else
+					lo_ack.setAnswer(Packet.FAIL);
 
-		switch(src.getType())
-		{
-			case Packet.LOG_ACK:
-				LoginAck l_ack = PacketCodec.decodeLoginAck(src.getData());
-				if(l_ack.getAnswer() == Packet.SUCCESS)
-					Log.d("Success","Login Success!");
-				else if(l_ack.getAnswer() == Packet.FAIL)
-					Log.d("Fail", "Login Failed!");
+				sendString=PacketCodec.encodeLoginAck(lo_ack);
+				try{
+					out.println(sendString);
+					System.out.println("Log Ack dispatched.");
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
 				break;
-
-			case Packet.JOIN_ACK:
-				break;
-
-			case Packet.MSS_ACK:
-				break;
-
-			default:
-				System.out.println("Not Defined Packet Type!!!!");
-
 		}
-		return isContinuous;
 
+		return isContinous;
 	}
 }

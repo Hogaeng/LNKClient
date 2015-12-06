@@ -6,16 +6,17 @@ import java.util.Scanner;
 
 public class PacketCodec {
 
-	public static String readDelimiter(BufferedReader in) throws IOException{
+	public static String readBuffReader(BufferedReader in) throws IOException{
 		char charBuf[] = new char[1];
-		String readMsg = "";
+		/*String readMsg = "";
 		short isdelim = 0;
 		int size = 1, totalSize = 0;
 		boolean isFirstDelimAppear = false;
-		String strSize = "";
+		String strSize = "";*/
 
+		String src = "";
 		// read character before packet delimiter
-		while(in.read(charBuf, 0, 1) != -1){
+		/*while(in.read(charBuf, 0, 1) != -1){
 			if(!isFirstDelimAppear){
 				// read size of packet
 				if(Packet.FIELD_DELIM.charAt(0) != charBuf[0]){
@@ -32,7 +33,6 @@ public class PacketCodec {
 					isFirstDelimAppear = true;
 				}
 			}
-
 			// Packet.PK_DELIM == '?'
 			else if(charBuf[0] == '?'){
 				readMsg += charBuf[0];
@@ -44,37 +44,23 @@ public class PacketCodec {
 				continue;
 			}
 		}
-
+		*/
 		// remove '\n'
 		while(in.read(charBuf, 0, 1) != -1)
 		{
-			if(charBuf[0] == '\n'){
+			if(charBuf[0] == '\n')
 				break;
-			}
+			src += charBuf[0];
+			System.out.println("Decode : step two");
 		}
-
-		// if there isn't delimiter
-		if(isdelim == 0 && charBuf[0]  != '\0'){
-			System.out.println("MSG DELIM IS NOT FOUND!!");
-		}
-		return readMsg;
+		if(src.equals(""))
+			return null;
+		return src;
 	}
 
 
-	public static Packet decodeHeader(BufferedReader in) throws IOException{
+	public static Packet decodeHeader(String src) throws IOException{
 		String type, data;
-		char charBuf[] = new char[1];
-		String src = "";
-		System.out.println("Decode : step one");
-		while(in.read(charBuf, 0, 1) != -1)
-		{
-			src += charBuf[0];
-			System.out.println(src);
-			System.out.println("Decode : step two");
-		}
-		System.out.println("Decode : step three");
-		if(src.equals(""))
-			return null;
 		System.out.println("Decode : step four...");
 		Scanner s = new Scanner(src).useDelimiter("\\"+Packet.FIELD_DELIM);
 

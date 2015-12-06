@@ -22,8 +22,8 @@ public class LoginActivity extends Activity{
     PendingIntent pendingIntent;
     Context mContext;
     String UserID,UserPW;
-    String sendMsg="Send";
-    BufferedReader recvMsg;
+    String sendMsg;
+    String recvMsg;
     EditText IDText,PWText;
     Button Login,Join;
     Packet packet;
@@ -54,7 +54,7 @@ public class LoginActivity extends Activity{
     private View.OnClickListener OnClickListener = new View.OnClickListener() {
         public void onClick( View view ) {
             int id = view.getId();
-
+            Intent intent;
             switch(id)
             {
                 case R.id.LoginButton:    //  access(log in)
@@ -74,14 +74,16 @@ public class LoginActivity extends Activity{
                         loginReq.setId(UserID);
                         loginReq.setPassword(UserPW);
                         sendMsg = PacketCodec.encodeLoginReq(loginReq);
+                        Log.e("sendMsg", sendMsg);
 
                         try {
                             SocketManager.getSocket();
-                            Toast.makeText(getBaseContext(),"Link Start!!",Toast.LENGTH_SHORT).show();
+                            while( SocketManager.isConnected == false );
+                            Log.e("2sendMsg", "Link Start!!"); //Toast.makeText(getBaseContext(),"Link Start!!",Toast.LENGTH_SHORT).show();
                             SocketManager.sendMsg(sendMsg);
-                            Log.e("sendMsg", sendMsg);
+                            Log.e("3sendMsg", sendMsg);
                             recvMsg = SocketManager.receiveMsg();
-                            Log.e("recvMsg", "received!");
+                            Log.e("recvMsg", recvMsg);
                             packet = PacketCodec.decodeHeader(recvMsg);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -100,25 +102,25 @@ public class LoginActivity extends Activity{
 
                         else if( loginAck.getAnswer() == Packet.SUCCESS ) {
                             Toast.makeText(getBaseContext(),"Login Successful!",Toast.LENGTH_SHORT).show();
+                            intent = new Intent( LoginActivity.this, MessageActivity.class );
+                            startActivity(intent);
                         }
 
                     }
                     break;
 
                 case R.id.JoinButton:
-
-                    Intent intent = new Intent();
-                    intent.setClass(mContext,JoinActivity.class);
-                    pendingIntent = PendingIntent.getActivity(mContext,0,intent,0);
-                    try
-                    {
-                        pendingIntent.send(mContext,0,intent);
-                    }
-                    catch(PendingIntent.CanceledException e)
-                    {
-                        System.out.println("Sending contentIntent failed: ");
-                    }
+                    /*try {
+                        SocketManager.getSocket();
+                        while( SocketManager.isConnected == false );
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }*/
+                    intent = new Intent( LoginActivity.this, JoinActivity.class );
+                    startActivity( intent );
                     break;
+
+                default:
 
             }
 

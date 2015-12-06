@@ -39,6 +39,7 @@ public class MainActivity extends Activity {
                 try
                 {
                     pendingIntent.send(mContext,0,intent);
+                    finish();
                 }
                 catch(PendingIntent.CanceledException e)
                 {
