@@ -82,6 +82,7 @@ public class LoginActivity extends Activity{
                             Log.e("2sendMsg", "Link Start!!"); //Toast.makeText(getBaseContext(),"Link Start!!",Toast.LENGTH_SHORT).show();
                             SocketManager.sendMsg(sendMsg);
                             Log.e("3sendMsg", sendMsg);
+
                             recvMsg = SocketManager.receiveMsg();
                             Log.e("recvMsg", recvMsg);
                             packet = PacketCodec.decodeHeader(recvMsg);

@@ -9,7 +9,12 @@ public class LoginAck {
     public int getAnswer() {
         return answer;
     }
-    public void setAnswer(int answer) {
-        this.answer = answer;
+    public void setAnswerOk() {
+        this.answer = Packet.SUCCESS;
+    }
+
+    public void setAnswerFail()
+    {
+        this.answer = Packet.FAIL;
     }
 }

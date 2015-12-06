@@ -46,13 +46,15 @@ public class PacketCodec {
 		}
 		*/
 		// remove '\n'
+		System.out.println("readBuffReader step one...StandBy...!");
 		while(in.read(charBuf, 0, 1) != -1)
 		{
 			if(charBuf[0] == '\n')
 				break;
 			src += charBuf[0];
-			System.out.println("Decode : step two");
+			System.out.println("readBufferReader step two");
 		}
+		System.out.println("readBufferReader step three");
 		if(src.equals(""))
 			return null;
 		return src;
@@ -83,6 +85,18 @@ public class PacketCodec {
 
 		return data;
 	}
+	public static JoinReq decodeJoinReq(String pk_data){
+		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
+		JoinReq dst = new JoinReq();
+
+		dst.setName(s.next());
+		s.skip(Packet.FIELD_DELIM);
+		dst.setId(s.next());
+		s.skip(Packet.FIELD_DELIM);
+		dst.setPassword(s.next());
+
+		return dst;
+	}
 
 	public static String encodeLoginReq(LoginReq pk_data){
 		String data = Packet.LOG_REQ
@@ -99,6 +113,7 @@ public class PacketCodec {
 		LoginReq dst = new LoginReq();
 
 		dst.setId(s.next());
+		s.skip(Packet.FIELD_DELIM);
 		dst.setPassword(s.next());
 
 		return dst;
@@ -120,8 +135,10 @@ public class PacketCodec {
 		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
 		LoginAck dst = new LoginAck();
 
-		dst.setAnswer(s.nextInt());
-
+		if(Packet.SUCCESS==s.nextInt())
+			dst.setAnswerOk();
+		else
+			dst.setAnswerFail();
 		return dst;
 	}
 
@@ -134,15 +151,24 @@ public class PacketCodec {
 		return data;
 	}
 
+	public static MssReq decodeMssReq(String pk_data){
+		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
+		MssReq dst = new MssReq();
+
+		dst.setMessage(s.next());
+
+		return dst;
+	}
+
 
 
 	// Decode join response packet data
 	/*public static JoinAck decodeJoinAck(String pk_data){
 		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
 		JoinAck dst = new JoinAck();
-		
+
 		dst.setResult(s.nextInt());
-		
+
 		return dst;
 	}*/
 
@@ -157,7 +183,7 @@ public class PacketCodec {
 	/*public static LoginAck decodeLoginAck(String pk_data){
 		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
 		LoginAck dst = new LoginAck();
-		
+
 		dst.setResult(s.nextInt());
 		if(dst.getResult() == Packet.SUCCESS)
 		{
