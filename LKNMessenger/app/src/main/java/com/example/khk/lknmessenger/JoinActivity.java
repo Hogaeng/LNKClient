@@ -100,7 +100,6 @@ public class JoinActivity extends Activity {
                         joinAck = PacketCodec.decodeJoinAck(packet.getData());
                         //  analyzing the ACK sent from server
                         if( joinAck.getAnswer() == Packet.FAIL ) {
-
                             AlertDialog.Builder dialog = new AlertDialog.Builder( JoinActivity.this );
                             dialog.setMessage("Invalid address or password.");
                             dialog.setPositiveButton("ok", null);
