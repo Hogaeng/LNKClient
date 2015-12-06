@@ -80,6 +80,7 @@ public class ThreadTcp implements Runnable {
 					lo_ack.setAnswerFail();
 
 				sendString=PacketCodec.encodeLoginAck(lo_ack);
+
 				try{
 					out.println(sendString);
 					System.out.println("Log Ack dispatched.");

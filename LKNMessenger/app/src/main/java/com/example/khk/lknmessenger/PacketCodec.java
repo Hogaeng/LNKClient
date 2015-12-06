@@ -98,6 +98,29 @@ public class PacketCodec {
 		return dst;
 	}
 
+	public static String encodeJoinAck(JoinAck pk_data){
+		String data = Packet.LOG_ACK + Packet.FIELD_DELIM
+				+ Integer.toString(pk_data.getAnswer()) + Packet.FIELD_DELIM;
+
+		/*if (pk_data.getAnswer() == Packet.SUCCESS){
+		}*/
+
+		data += Packet.PK_DELIM;
+
+		return data;
+	}
+
+	public static JoinAck decodeJoinAck(String pk_data){
+		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
+		JoinAck dst = new JoinAck();
+
+		if(Packet.SUCCESS==s.nextInt())
+			dst.setAnswerOk();
+		else
+			dst.setAnswerFail();
+		return dst;
+	}
+
 	public static String encodeLoginReq(LoginReq pk_data){
 		String data = Packet.LOG_REQ
 				+ Packet.FIELD_DELIM + pk_data.getId()

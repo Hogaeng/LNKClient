@@ -36,6 +36,14 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent();
                 intent.setClass(mContext, LoginActivity.class);
                 pendingIntent = PendingIntent.getActivity(mContext,0,intent,0);
+
+                try {
+                    SocketManager.getSocket();
+                    while( SocketManager.isConnected == false );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 try
                 {
                     pendingIntent.send(mContext,0,intent);

@@ -77,8 +77,7 @@ public class LoginActivity extends Activity{
                         Log.e("sendMsg", sendMsg);
 
                         try {
-                            SocketManager.getSocket();
-                            while( SocketManager.isConnected == false );
+
                             Log.e("2sendMsg", "Link Start!!"); //Toast.makeText(getBaseContext(),"Link Start!!",Toast.LENGTH_SHORT).show();
                             SocketManager.sendMsg(sendMsg);
                             Log.e("3sendMsg", sendMsg);
@@ -105,18 +104,13 @@ public class LoginActivity extends Activity{
                             Toast.makeText(getBaseContext(),"Login Successful!",Toast.LENGTH_SHORT).show();
                             intent = new Intent( LoginActivity.this, MessageActivity.class );
                             startActivity(intent);
+
                         }
 
                     }
                     break;
 
                 case R.id.JoinButton:
-                    /*try {
-                        SocketManager.getSocket();
-                        while( SocketManager.isConnected == false );
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }*/
                     intent = new Intent( LoginActivity.this, JoinActivity.class );
                     startActivity( intent );
                     break;

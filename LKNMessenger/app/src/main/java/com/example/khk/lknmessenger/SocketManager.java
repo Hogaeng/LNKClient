@@ -80,8 +80,10 @@ public class SocketManager{
     public static void closeSocket() throws IOException
     {
         //  method for closing socket
-        if( socket != null )
+        if( socket != null ) {
+            Log.e("Close", "Close Socket");
             socket.close();
+        }
     }
 
     public static void sendMsg( String message ) throws IOException {
