@@ -1,7 +1,9 @@
 package com.example.khk.lknmessenger;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -12,14 +14,14 @@ import android.widget.TextView;
 /**
  * Created by KHK on 2015-12-07.
  */
-public class LobbyActivity extends Activity {
-
+public class LobbyActivity extends FragmentActivity{
+    TabHost tabHost;
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lobbywindow);
 
-        TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
+        tabHost = (TabHost) findViewById(android.R.id.tabhost);
         tabHost.setup();
 
         TabHost.TabSpec spec1 = tabHost.newTabSpec("Tab1").setContent(R.id.Friend).setIndicator(getString(R.string.tab1));
@@ -39,7 +41,6 @@ public class LobbyActivity extends Activity {
         TextView tv1 = (TextView) r11.getChildAt(1);
         tv1.setLayoutParams(tvParams);
         tv1.setTextAppearance(this, android.R.style.TextAppearance_Medium);
-        
         tv1.setPadding(10, 0, 10, 0);
         tv1.setGravity(Gravity.CENTER);
 
