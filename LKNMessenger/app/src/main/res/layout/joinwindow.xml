@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#2cb26e">
 
 
     <TextView
@@ -11,15 +12,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_above="@+id/IDEdit"
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffff" />
 
     <EditText
         android:id="@+id/NameEdit"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/NameJoin"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="29dp"
+        android:layout_alignStart="@+id/IDEdit"
+        android:textColor="#ffffff" />
 
 
     <TextView
@@ -28,15 +33,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_below="@+id/NameEdit"
-        android:layout_alignParentStart="true" />
+        android:layout_alignTop="@+id/IDEdit"
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffff" />
 
     <EditText
         android:id="@+id/IDEdit"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/IDJoin"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/NameEdit"
+        android:layout_marginTop="39dp"
+        android:layout_toEndOf="@+id/RepeatJoin"
+        android:textColor="#ffffff" />
 
 
     <TextView
@@ -46,14 +54,18 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_below="@+id/IDEdit"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="46dp"
+        android:textColor="#ffffff" />
 
     <EditText
         android:id="@+id/PWEdit"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/PWJoin"
-        android:layout_alignParentStart="true" />
+        android:layout_alignTop="@+id/PWJoin"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/RepeatJoin"
+        android:textColor="#ffffff" />
 
     <TextView
         android:id="@+id/RepeatJoin"
@@ -61,31 +73,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_below="@+id/PWEdit"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/IDEdit"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="126dp"
+        android:textColor="#ffffff" />
 
     <EditText
         android:id="@+id/RepeatEdit"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/RepeatJoin"
-        android:layout_alignParentStart="true" />
+        android:layout_alignTop="@+id/RepeatJoin"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/RepeatJoin"
+        android:textColor="#ffffff" />
 
     <Button
         android:id="@+id/SignupButton"
-        android:text="Sign up"
+        android:text="Sign Up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/RepeatEdit"
-        android:layout_alignParentStart="true" />
+        android:layout_alignEnd="@+id/PWJoin"
+        android:layout_marginTop="121dp"
+        android:textColor="#ffffff"
+        android:background="#1e875f" />
 
     <Button
         android:id="@+id/CancelButton"
         android:text="Cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/RepeatEdit"
-        android:layout_toEndOf="@+id/SignupButton" />
+        android:textColor="#ffffff"
+        android:background="#1e875f"
+        android:layout_alignTop="@+id/SignupButton"
+        android:layout_alignStart="@+id/RepeatEdit" />
 
 
 

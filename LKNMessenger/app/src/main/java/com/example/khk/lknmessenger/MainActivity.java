@@ -39,6 +39,7 @@ public class MainActivity extends Activity {
 
                 try {
                     SocketManager.getSocket();
+                    Toast.makeText(getBaseContext(),"Execute On-line Mode",Toast.LENGTH_LONG).show();
                     while( SocketManager.isConnected == false );
                 } catch (IOException e) {
                     e.printStackTrace();

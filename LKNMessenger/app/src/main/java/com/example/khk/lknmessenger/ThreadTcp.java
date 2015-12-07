@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.ResultSet;
 
 public class ThreadTcp implements Runnable {
 
@@ -21,7 +22,7 @@ public class ThreadTcp implements Runnable {
 
 	private boolean isContinous = false;
 	private int user_id = 0;
-
+	private Database db;
 	String inputData;
 	Packet rcvPacket;
 
@@ -69,6 +70,7 @@ public class ThreadTcp implements Runnable {
 	public boolean handler(Packet src, PrintWriter out)throws IOException
 	{
 		String sendString;
+
 		switch(src.getType()){
 			case Packet.LOG_REQ:
 				System.out.println("Log REQ recevied.");
@@ -80,7 +82,6 @@ public class ThreadTcp implements Runnable {
 					lo_ack.setAnswerFail();
 
 				sendString=PacketCodec.encodeLoginAck(lo_ack);
-
 				try{
 					out.println(sendString);
 					System.out.println("Log Ack dispatched.");
@@ -89,8 +90,52 @@ public class ThreadTcp implements Runnable {
 					e.printStackTrace();
 				}
 				break;
-		}
 
+			/*case Packet.JOIN_REQ:
+				System.out.println("Join REQ recevied");
+				JoinReq jo_req = PacketCodec.decodeJoinReq(src.getData());
+				JoinAck jo_ack = new JoinAck();
+				String query = "select Id from "+Database.memberData;//+" where * Dbid";
+				ResultSet rs = db.excuteStatementReturnRs(query);
+				try{
+					while(rs.next())
+					{
+						if(jo_req.getId().equals(rs.getString("Id"))){
+							jo_ack.setAnswerFail();
+							System.out.println("Join Ack : Fail");
+							break;
+						}
+					}
+
+					if(rs.next()==false){
+						jo_ack.setAnswerOk();
+						query = "insert into "+Database.memberData+" (Name,Id,Pw) values "
+								+"('"+jo_req.getName()+"','"+jo_req.getId()+"','"+jo_req.getPassword()+"')";
+						db.excuteStatement(query);
+						System.out.println("Join Ack : Success");
+					}
+					sendString = PacketCodec.encodeJoinAck(jo_ack);
+					try{
+						out.println(sendString);
+						System.out.println("JOin Ack dispatched.");
+					}
+					catch(Exception e){
+						e.printStackTrace();
+					}
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+
+				break;
+			case Packet.MSS_REQ:
+				System.out.println("MSS REQ recevied");
+				MssReq mss_req = PacketCodec.decodeMssReq(src.getData());
+				MssAck mss_ack = new MssAck();
+				break;*/
+
+		}
 		return isContinous;
 	}
 }

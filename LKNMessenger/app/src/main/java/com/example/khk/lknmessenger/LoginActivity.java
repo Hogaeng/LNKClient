@@ -92,7 +92,6 @@ public class LoginActivity extends Activity{
                         loginAck = PacketCodec.decodeLoginAck(packet.getData());
                         //  analyzing the ACK sent from server
                         if( loginAck.getAnswer() == Packet.FAIL ) {
-
                             AlertDialog.Builder dialog = new AlertDialog.Builder( LoginActivity.this );
                             dialog.setMessage("Invalid address or password.");
                             dialog.setPositiveButton("ok", null);
