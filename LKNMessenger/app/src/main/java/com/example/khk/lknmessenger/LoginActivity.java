@@ -75,6 +75,7 @@ public class LoginActivity extends Activity{
                         loginReq.setPassword(UserPW);
                         sendMsg = PacketCodec.encodeLoginReq(loginReq);
                         Log.e("sendMsg", sendMsg);
+                        
 
                         try {
 
