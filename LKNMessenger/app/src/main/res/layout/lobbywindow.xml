@@ -24,10 +24,11 @@
                 android:layout_height="wrap_content"
                 android:hint = "Friend"/>
             <!-- Tab 2 -->
-            <ListView
+            <TextView
                 android:id="@+id/Talklist"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="Talklist"/>
             <!-- Tab 3 -->
 
         </FrameLayout>

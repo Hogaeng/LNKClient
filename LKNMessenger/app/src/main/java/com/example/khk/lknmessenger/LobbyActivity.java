@@ -37,7 +37,7 @@ public class LobbyActivity extends TabActivity {
 
     private String sendMsg,recvMsg;
     private TabHost mTabHost;
-    private ListView talklist;
+    private TextView talklist;
     private EditText friendlist;
     private Button enterRoom;
     private ArrayAdapter<String> arrAdapter1,arrAdapter2;
@@ -66,10 +66,10 @@ public class LobbyActivity extends TabActivity {
 
         //arrAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1);
         arrAdapter2 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_2,arr);
-        talklist.setAdapter(arrAdapter2);
+//        talklist.setAdapter(arrAdapter2);
 
         enterRoom = (Button)findViewById(R.id.MakeRoom);
-        talklist = (ListView)findViewById(R.id.Talklist);
+        talklist = (TextView)findViewById(R.id.Talklist);
         friendlist = (EditText)findViewById(R.id.Friendlist);
 
         mTabHost = getTabHost();
@@ -150,7 +150,6 @@ public class LobbyActivity extends TabActivity {
 
         editDialog.show();
     }
-
 
 
 }
