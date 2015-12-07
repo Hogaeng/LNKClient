@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by KHK on 2015-12-07.
@@ -36,8 +37,9 @@ public class LobbyActivity extends TabActivity {
 
     private String sendMsg,recvMsg;
     private TabHost mTabHost;
-    private ListView friendlist,talklist;
-    private Button makeRoom;
+    private ListView talklist;
+    private EditText friendlist;
+    private Button enterRoom;
     private ArrayAdapter<String> arrAdapter1,arrAdapter2;
     private LobbyReq lobbyReq;
     private LobbyAck lobbyAck;
@@ -45,7 +47,8 @@ public class LobbyActivity extends TabActivity {
     private MakeRoomAck makeRoomAck;
     private Packet packet;
     private Intent intent;
-    public static String Roomname;
+    private String Roomname;
+
 
     FragmentManager fm = getFragmentManager();
 
@@ -55,24 +58,30 @@ public class LobbyActivity extends TabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lobbywindow);
 
-        arrAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1);
-        arrAdapter2 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_2);
+        final ArrayList arr = new ArrayList();
+        arr.add("Room1");
+        arr.add("Room2");
+        arr.add("Room3");
+        mTabHost = getTabHost();
 
-        makeRoom = (Button)findViewById(R.id.MakeRoom);
-        talklist = (ListView)findViewById(R.id.Talklist);
-        friendlist = (ListView)findViewById(R.id.Friendlist);
-
-
-
-        makeRoom.setOnClickListener(OnClickListener);
-        talklist.setOnItemClickListener(setOnItemClickListener);
-        friendlist.setAdapter(arrAdapter1);
+        //arrAdapter1 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1);
+        arrAdapter2 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_2,arr);
         talklist.setAdapter(arrAdapter2);
+
+        enterRoom = (Button)findViewById(R.id.MakeRoom);
+        talklist = (ListView)findViewById(R.id.Talklist);
+        friendlist = (EditText)findViewById(R.id.Friendlist);
+
         mTabHost = getTabHost();
 
         // 탭 1, 2, 3 을 추가하면서 태그를 달아주고, 제목(또는 아이콘)을 설정한다.
-        mTabHost.addTab(mTabHost.newTabSpec("Friendlist").setContent(R.id.Friendlist).setIndicator("Friendlist"));
-        mTabHost.addTab(mTabHost.newTabSpec("Talklist").setContent(R.id.Talklist).setIndicator("Talklist"));
+        mTabHost.addTab(mTabHost.newTabSpec("tab1").setContent(R.id.Friendlist).setIndicator("Friendlist"));
+        mTabHost.addTab(mTabHost.newTabSpec("tab2").setContent(R.id.Talklist).setIndicator("Talklist"));
+
+        enterRoom.setOnClickListener(OnClickListener);
+        //talklist.setOnItemClickListener(setOnItemClickListener);
+        //friendlist.setAdapter(arrAdapter1);
+
 
 
         lobbyReq = new LobbyReq();
@@ -86,81 +95,60 @@ public class LobbyActivity extends TabActivity {
 
         @Override
         public void onClick(View v) {
-            AlertMakeRoom room = new AlertMakeRoom();
-            room.show(fm, " ");
-
-            makeRoomReq.setRoomName("Room1");
-
-            Log.e("RoomName", "Makeit");
-
-            sendMsg = PacketCodec.encodeMakeRoomReq(makeRoomReq);
-            try {
-                Log.e("2sendMsg", "Link Start!!"); //Toast.makeText(getBaseContext(),"Link Start!!",Toast.LENGTH_SHORT).show();
-                SocketManager.sendMsg(sendMsg);
-                Log.e("3sendMsg", sendMsg);
-                recvMsg = SocketManager.receiveMsg();
-                Log.e("recvMsg", recvMsg);
-                packet = PacketCodec.decodeHeader(recvMsg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            makeRoomAck = PacketCodec.decodeMakeRoomAck(packet.getData());
-            //  analyzing the ACK sent from server
-            if( makeRoomAck.getAnswer() == Packet.FAIL ) {
-                AlertDialog.Builder dialog = new AlertDialog.Builder( LobbyActivity.this );
-                dialog.setMessage("Failed to make room");
-                dialog.setPositiveButton("ok", null);
-                dialog.show();
-
-            }                   //  if the ACK means login fail, create the alert dialog
-
-            else if( makeRoomAck.getAnswer() == Packet.SUCCESS ) {
-                arrAdapter2.add("Room1");
-                Toast.makeText(getBaseContext(), "Make New Room", Toast.LENGTH_SHORT).show();
-            }
-
+            EditDialog();
 
         }
-
 
     };
 
-    private AdapterView.OnItemClickListener setOnItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            intent = new Intent( LobbyActivity.this, MessageActivity.class );
-            startActivity(intent);
-        }
 
+    public void EditDialog() {
+        final EditText alpha;
+        AlertDialog.Builder editDialog;
+        editDialog = new AlertDialog.Builder(LobbyActivity.this);
+        LayoutInflater inflater = LobbyActivity.this.getLayoutInflater();
+        View layout = inflater.inflate(R.layout.alertmakeroom, null);
 
-    };
+        alpha = (EditText) layout.findViewById(R.id.name);
 
-    class AlertMakeRoom extends DialogFragment {
-        public String Name;
-        private EditText mEdit;
-        public Dialog onCreateDialog(final Bundle savedInstanceState) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            LayoutInflater inflater = getActivity().getLayoutInflater();
-            View layout = inflater.inflate(R.layout.alertmakeroom, null);
-            builder.setView(layout);
-            mEdit = (EditText)findViewById(R.id.name);
+        editDialog.setView(layout)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Roomname = alpha.getText().toString();
 
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Name = mEdit.getText().toString();
-                    Toast.makeText(getActivity(),"Setting Room Name : "+Name,Toast.LENGTH_SHORT).show();
-                    Roomname = Name;
-                    Log.e("RoomName",Roomname);
-                }
-            });
+                        makeRoomReq.setRoomName(Roomname);
+                        Log.e("RoomName", Roomname);
 
+                        sendMsg = PacketCodec.encodeMakeRoomReq(makeRoomReq);
+                        try {
+                            Log.e("2sendMsg", "Link Start!!"); //Toast.makeText(getBaseContext(),"Link Start!!",Toast.LENGTH_SHORT).show();
+                            SocketManager.sendMsg(sendMsg);
+                            Log.e("3sendMsg", sendMsg);
+                            recvMsg = SocketManager.receiveMsg();
+                            Log.e("recvMsg", recvMsg);
+                            packet = PacketCodec.decodeHeader(recvMsg);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
+                        makeRoomAck = PacketCodec.decodeMakeRoomAck(packet.getData());
+                        //  analyzing the ACK sent from server
+                        if( makeRoomAck.getAnswer() == Packet.FAIL ) {
 
-            return builder.create();
+                            Toast.makeText(getBaseContext(), "Failed to make Room", Toast.LENGTH_SHORT).show();
 
-        }
+                        }                   //  if the ACK means login fail, create the alert dialog
+
+                        else if( makeRoomAck.getAnswer() == Packet.SUCCESS ) {
+                            Toast.makeText(getBaseContext(), "Make New Room", Toast.LENGTH_SHORT).show();
+                            intent = new Intent( LobbyActivity.this, MessageActivity.class );
+                            startActivity(intent);
+                        }
+
+                    }
+                });
+
+        editDialog.show();
     }
 
 

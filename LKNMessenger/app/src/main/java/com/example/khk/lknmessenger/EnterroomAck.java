@@ -1,12 +1,12 @@
 package com.example.khk.lknmessenger;
 
 /**
- * Created by KHK on 2015-12-07.
+ * Created by KHK on 2015-12-08.
  */
 
-public class MssAck {
+public class EnterroomAck {
     private int answer;
-    private String arrTime;
+
     public int getAnswer() {
         return answer;
     }
@@ -17,13 +17,5 @@ public class MssAck {
     public void setAnswerFail()
     {
         this.answer = Packet.FAIL;
-    }
-
-    public String getArrtime() {
-        return arrTime;
-    }
-
-    public void setArrtime(String arg) {
-        this.arrTime = arg;
     }
 }

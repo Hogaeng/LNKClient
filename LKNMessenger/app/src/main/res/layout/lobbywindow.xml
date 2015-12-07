@@ -18,10 +18,11 @@
             android:layout_height="384dp"
             android:layout_weight="0.21">
             <!-- Tab 1 -->
-            <ListView
+            <EditText
                 android:id="@+id/Friendlist"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:hint = "Friend"/>
             <!-- Tab 2 -->
             <ListView
                 android:id="@+id/Talklist"

@@ -151,7 +151,8 @@ public class PacketCodec {
 
 	public static String encodeMssAck(MssAck pk_data){
 		String data = Packet.MSS_ACK
-				+ Packet.FIELD_DELIM + pk_data.getAnswer()
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getAnswer())
+				+ Packet.FIELD_DELIM + pk_data.getArrtime()
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
 
@@ -165,6 +166,9 @@ public class PacketCodec {
 			dst.setAnswerOk();
 		else
 			dst.setAnswerFail();
+
+		s.skip(Packet.FIELD_DELIM);
+		dst.setArrtime(s.next());
 
 		return dst;
 	}
@@ -185,7 +189,7 @@ public class PacketCodec {
 
 	public static String encodeInviRoomAck(InviRoomAck pk_data ){
 		String data = Packet.INVIROOM_ACK
-				+ Packet.FIELD_DELIM + pk_data.getAnswer()
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getAnswer())
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
 
@@ -219,7 +223,7 @@ public class PacketCodec {
 
 	public static String encodeMakeRoomAck(MakeRoomAck pk_data ){
 		String data = Packet.MAKEROOM_ACK
-				+ Packet.FIELD_DELIM + pk_data.getAnswer()
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getAnswer())
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
 
@@ -252,7 +256,7 @@ public class PacketCodec {
 
 	public static String encodeAddFrinedAck(AddFriendAck pk_data ){
 		String data = Packet.ADDFRIEND_ACK
-				+ Packet.FIELD_DELIM + pk_data.getAnswer()
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getAnswer())
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
 
@@ -286,9 +290,9 @@ public class PacketCodec {
 
 	public static String encodeLobbyAck(LobbyAck pk_data ){
 		String data = Packet.ADDFRIEND_ACK
-				+ Packet.FIELD_DELIM + pk_data.getRoomNum()
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getRoomNum())
 				+ Packet.FIELD_DELIM + pk_data.getRoomName()
-				+ Packet.FIELD_DELIM + pk_data.getFriendNum()
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getFriendNum())
 				+ Packet.FIELD_DELIM + pk_data.getFriendName()
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
@@ -325,9 +329,9 @@ public class PacketCodec {
 
 	public static String encodeRoomAck(RoomAck pk_data ){
 		String data = Packet.ADDFRIEND_ACK
-				+ Packet.FIELD_DELIM + pk_data.getMauNum()
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getMauNum())
 				+ Packet.FIELD_DELIM + pk_data.getMau()
-				+ Packet.FIELD_DELIM + pk_data.getMemberNum()
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getMemberNum())
 				+ Packet.FIELD_DELIM + pk_data.getMember()
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
@@ -364,7 +368,7 @@ public class PacketCodec {
 	}
 	public static String encodeGiveMemAck(GiveMemAck pk_data ){
 		String data = Packet.ADDFRIEND_ACK
-				+ Packet.FIELD_DELIM + pk_data.getmemNum()
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getmemNum())
 				+ Packet.FIELD_DELIM + pk_data.getmemberName()
 				+ Packet.FIELD_DELIM + pk_data.getmemberId()
 				+ Packet.FIELD_DELIM
@@ -373,7 +377,7 @@ public class PacketCodec {
 		return data;
 	}
 
-	public static String preEncodeAck(int num, String[] mem)
+	public static String preEncodeGiveMemAck(int num, String[] mem)
 	{
 		String send = "";
 		send += Integer.toString(num);
@@ -397,7 +401,7 @@ public class PacketCodec {
 		return dst;
 	}
 
-	public static String[] nextDecodeAck(int num, String mem)
+	public static String[] nextDecodeGiveMemAck(int num, String mem)
 	{
 		String[] member = new String[num];
 		Scanner s = new Scanner(mem).useDelimiter(Packet.SMALLDELIM);
@@ -409,5 +413,41 @@ public class PacketCodec {
 		return member;
 	}
 
+	public static String encodeEnterroomReq(EnterroomReq pk_data){
+		String data = Packet.INVIROOM_REQ
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getRoomid())
+				+ Packet.FIELD_DELIM
+				+ Packet.PK_DELIM;
 
+		return data;
+	}
+	public static EnterroomReq decodeEnterroomReq(String pk_data){
+		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
+		EnterroomReq dst = new EnterroomReq();
+
+		dst.setRoomid(s.nextInt());
+
+		return dst;
+	}
+
+	public static String encodeEnterroomAck(EnterroomAck pk_data ){
+		String data = Packet.INVIROOM_ACK
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getAnswer())
+				+ Packet.FIELD_DELIM
+				+ Packet.PK_DELIM;
+
+		return data;
+	}
+	public static EnterroomAck decodeEnterroomAck(String pk_data){
+		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
+		EnterroomAck dst = new EnterroomAck();
+
+		if(Packet.SUCCESS==s.nextInt())
+			dst.setAnswerOk();
+		else
+			dst.setAnswerFail();
+
+		return dst;
+	}
 }
+

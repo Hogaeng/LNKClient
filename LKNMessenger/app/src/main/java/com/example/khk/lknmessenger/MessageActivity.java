@@ -5,11 +5,13 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -21,6 +23,7 @@ public class MessageActivity extends Activity {
 
     private Button Send;
     private EditText editText;
+    private ScrollView scrollView;
     private ListView listView;
     private String message;
     private String sendMsg,recvMsg;
@@ -32,13 +35,23 @@ public class MessageActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.messagewindow);
+        scrollView = (ScrollView)findViewById(R.id.scrollView);
 
-        arrAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1);
+        arrAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.mylist);
+        listView = (ListView)findViewById(R.id.Message);
+        listView.setAdapter( arrAdapter ) ;
+
+        listView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                scrollView.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
 
         Send = (Button)findViewById(R.id.Send);
         editText = (EditText)findViewById(R.id.EditText);
-        listView = (ListView)findViewById(R.id.Message);
-        message = editText.getText().toString();
+
 
         /*f(message.equals(""))
             Send.setEnabled(false);
@@ -55,7 +68,7 @@ public class MessageActivity extends Activity {
     private View.OnClickListener OnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            message = editText.getText().toString();
             mssReq.setMessage(message);
             sendMsg = PacketCodec.encodeMssReq(mssReq);
             Log.e("sendMsg", sendMsg);
@@ -82,7 +95,7 @@ public class MessageActivity extends Activity {
             }                   //  if the ACK means login fail, create the alert dialog
 
             else if( mssAck.getAnswer() == Packet.SUCCESS ) {
-                    arrAdapter.add(message) ;
+                    arrAdapter.add(message);
                     message = "";
                     editText.setText("");
             }
