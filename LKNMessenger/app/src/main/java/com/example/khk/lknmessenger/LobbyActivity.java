@@ -33,6 +33,7 @@ import java.io.IOException;
  * Created by KHK on 2015-12-07.
  */
 public class LobbyActivity extends TabActivity {
+
     private String sendMsg,recvMsg;
     private TabHost mTabHost;
     private ListView friendlist,talklist;
@@ -44,7 +45,7 @@ public class LobbyActivity extends TabActivity {
     private MakeRoomAck makeRoomAck;
     private Packet packet;
     private Intent intent;
-    private String Roomname;
+    public static String Roomname;
 
     FragmentManager fm = getFragmentManager();
 
@@ -60,6 +61,7 @@ public class LobbyActivity extends TabActivity {
         makeRoom = (Button)findViewById(R.id.MakeRoom);
         talklist = (ListView)findViewById(R.id.Talklist);
         friendlist = (ListView)findViewById(R.id.Friendlist);
+
 
 
         makeRoom.setOnClickListener(OnClickListener);
@@ -87,9 +89,9 @@ public class LobbyActivity extends TabActivity {
             AlertMakeRoom room = new AlertMakeRoom();
             room.show(fm, " ");
 
-            makeRoomReq.setRoomName(Roomname);
+            makeRoomReq.setRoomName("Room1");
 
-            Log.e("RoomName", Roomname);
+            Log.e("RoomName", "Makeit");
 
             sendMsg = PacketCodec.encodeMakeRoomReq(makeRoomReq);
             try {
@@ -114,9 +116,10 @@ public class LobbyActivity extends TabActivity {
             }                   //  if the ACK means login fail, create the alert dialog
 
             else if( makeRoomAck.getAnswer() == Packet.SUCCESS ) {
-                arrAdapter2.add(Roomname);
+                arrAdapter2.add("Room1");
                 Toast.makeText(getBaseContext(), "Make New Room", Toast.LENGTH_SHORT).show();
             }
+
 
         }
 
@@ -134,15 +137,14 @@ public class LobbyActivity extends TabActivity {
     };
 
     class AlertMakeRoom extends DialogFragment {
-        EditText mEdit;
         public String Name;
+        private EditText mEdit;
         public Dialog onCreateDialog(final Bundle savedInstanceState) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View layout = inflater.inflate(R.layout.alertmakeroom, null);
             builder.setView(layout);
-            mEdit = (EditText)layout.findViewById(R.id.name);
-
+            mEdit = (EditText)findViewById(R.id.name);
 
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
@@ -150,8 +152,11 @@ public class LobbyActivity extends TabActivity {
                     Name = mEdit.getText().toString();
                     Toast.makeText(getActivity(),"Setting Room Name : "+Name,Toast.LENGTH_SHORT).show();
                     Roomname = Name;
+                    Log.e("RoomName",Roomname);
                 }
             });
+
+
 
             return builder.create();
 
