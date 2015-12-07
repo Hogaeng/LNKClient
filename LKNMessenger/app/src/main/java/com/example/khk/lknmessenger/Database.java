@@ -20,6 +20,7 @@ public class Database {
     Statement st;
     ResultSet rs;
     PreparedStatement pstmt;
+    public String query;
 
     public Database(){
         Connection con = null;
@@ -30,7 +31,7 @@ public class Database {
 
     public boolean connect(){
         try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/androidDB", "androidDB", "androidDB");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/androidDB","androidDB", "androidDB");
             st = con.createStatement();
         }catch(SQLException e){
             System.out.println("SQLException: " + e.getMessage());
@@ -48,7 +49,7 @@ public class Database {
         return con;
     }
 
-    public void setPreparedStatement(String query){
+    public void setPreparedStatement(){
         try{
             pstmt = con.prepareStatement(query);
             //psmt.setString(1,test);
@@ -57,16 +58,16 @@ public class Database {
             printError(e, query);
         }
     }
-    public void excuteStatement(String query){
+    public void excuteStatement(){
         try{
-            getStatement().executeQuery(query);}
+            getStatement().execute(query);}
         catch(Exception e)
         {
             e.printStackTrace();
         }
     }
 
-    public ResultSet excuteStatementReturnRs(String query){
+    public ResultSet excuteStatementReturnRs(){
         try{
             rs= getStatement().executeQuery(query);}
         catch(Exception e)

@@ -300,8 +300,11 @@ public class PacketCodec {
 		LobbyAck dst = new LobbyAck();
 
 		dst.setRoomNum(s.nextInt());
+		s.skip(Packet.FIELD_DELIM);
 		dst.setRoomName(s.next());
+		s.skip(Packet.FIELD_DELIM);
 		dst.setFriendNum(s.nextInt());
+		s.skip(Packet.FIELD_DELIM);
 		dst.setFriendName(s.next());
 
 		return dst;
@@ -336,10 +339,75 @@ public class PacketCodec {
 		RoomAck dst = new RoomAck();
 
 		dst.setMauNum(s.nextInt());
+		s.skip(Packet.FIELD_DELIM);
 		dst.setMau(s.next());
+		s.skip(Packet.FIELD_DELIM);
 		dst.setMemberNum(s.nextInt());
+		s.skip(Packet.FIELD_DELIM);
 		dst.setMember(s.next());
 
 		return dst;
 	}
+
+	public static String encodeGiveMemReq(GiveMemReq pk_data){
+		String data = Packet.GIVEMEM_REQ
+				+ Packet.FIELD_DELIM
+				+ Packet.PK_DELIM;
+
+		return data;
+	}
+	public static GiveMemReq decodeGiveMemReq(String pk_data){
+		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
+		GiveMemReq dst = new GiveMemReq();
+
+		return dst;
+	}
+	public static String encodeGiveMemAck(GiveMemAck pk_data ){
+		String data = Packet.ADDFRIEND_ACK
+				+ Packet.FIELD_DELIM + pk_data.getmemNum()
+				+ Packet.FIELD_DELIM + pk_data.getmemberName()
+				+ Packet.FIELD_DELIM + pk_data.getmemberId()
+				+ Packet.FIELD_DELIM
+				+ Packet.PK_DELIM;
+
+		return data;
+	}
+
+	public static String preEncodeAck(int num, String[] mem)
+	{
+		String send = "";
+		send += Integer.toString(num);
+		for(int i = 0; i<num; i++)
+		{	send+=Packet.SMALLDELIM;
+			send+=mem[i];
+		}
+		return send;
+	}
+
+	public static GiveMemAck decodeGiveMemAck(String pk_data){
+		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
+		GiveMemAck dst = new GiveMemAck();
+
+		dst.setmemberNum(s.nextInt());
+		s.skip(Packet.FIELD_DELIM);
+		dst.setmemberName(s.next());
+		s.skip(Packet.FIELD_DELIM);
+		dst.setmemberId(s.next());
+
+		return dst;
+	}
+
+	public static String[] nextDecodeAck(int num, String mem)
+	{
+		String[] member = new String[num];
+		Scanner s = new Scanner(mem).useDelimiter(Packet.SMALLDELIM);
+
+		for(int i =0 ;i<num;i++){
+			member[i] = s.next();
+			s.skip(Packet.SMALLDELIM);
+		}
+		return member;
+	}
+
+
 }

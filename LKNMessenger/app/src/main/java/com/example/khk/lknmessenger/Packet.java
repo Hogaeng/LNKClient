@@ -25,9 +25,12 @@ public class Packet {
 	public static final String ROOM_REQ = "ROOM_REQ";
 	public static final String ROOM_ACK = "ROOM_ACK";
 
+	public static final String GIVEMEM_REQ = "GIVEMEM_REQ";
+	public static final String GIVEMEM_ACK = "GIVEMEM_ACK";
 
 	public static final String FIELD_DELIM = "|";
 	public static final String PK_DELIM = "?";
+	public static final String SMALLDELIM = ":";
 
 	public static final int SUCCESS = 0x01;
 	public static final int FAIL = 0x00;

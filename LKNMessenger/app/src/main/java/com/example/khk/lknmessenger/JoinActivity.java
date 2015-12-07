@@ -101,7 +101,7 @@ public class JoinActivity extends Activity {
                         //  analyzing the ACK sent from server
                         if( joinAck.getAnswer() == Packet.FAIL ) {
                             AlertDialog.Builder dialog = new AlertDialog.Builder( JoinActivity.this );
-                            dialog.setMessage("Invalid address or password.");
+                            dialog.setMessage("It's already have same ID");
                             dialog.setPositiveButton("ok", null);
                             dialog.show();
 
