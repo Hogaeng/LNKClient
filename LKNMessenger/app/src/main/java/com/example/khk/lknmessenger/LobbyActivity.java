@@ -39,6 +39,7 @@ public class LobbyActivity extends Activity {
         TextView tv1 = (TextView) r11.getChildAt(1);
         tv1.setLayoutParams(tvParams);
         tv1.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+        
         tv1.setPadding(10, 0, 10, 0);
         tv1.setGravity(Gravity.CENTER);
 
