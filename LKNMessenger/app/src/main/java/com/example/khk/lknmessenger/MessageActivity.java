@@ -98,6 +98,12 @@ public class MessageActivity extends Activity {
                     arrAdapter.add(message);
                     message = "";
                     editText.setText("");
+                    String[] arg;
+                    MssAndArrtimeAndUser[] mau;
+                    arg = PacketCodec.nextDecode(mssAck.getListnum(),mssAck.getlist());
+                    mau = PacketCodec.nextTinydecode(arg.length,arg);
+                    for(int i = 0; i<mau.length;i++)
+                    arrAdapter.add(mau[i].getMss());
             }
 
         }
