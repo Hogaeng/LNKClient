@@ -1,8 +1,10 @@
 package com.example.khk.lknmessenger;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Scanner;
+
 
 public class PacketCodec {
 
@@ -153,7 +155,7 @@ public class PacketCodec {
 		String data = Packet.MSS_ACK
 				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getAnswer())
 				+ Packet.FIELD_DELIM + pk_data.getArrtime()
-				+ Packet.FIELD_DELIM
+				+ Packet.FIELD_DELIM + pk_data.getlist()
 				+ Packet.PK_DELIM;
 
 		return data;
@@ -169,6 +171,8 @@ public class PacketCodec {
 
 		s.skip(Packet.FIELD_DELIM);
 		dst.setArrtime(s.next());
+		s.skip(Packet.FIELD_DELIM);
+		dst.setlist(s.next());
 
 		return dst;
 	}
@@ -275,7 +279,7 @@ public class PacketCodec {
 	}
 
 	public static String encodeLobbyReq(LobbyReq pk_data){
-		String data = Packet.ADDFRIEND_REQ
+		String data = Packet.LOBBY_REQ
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
 
@@ -289,7 +293,8 @@ public class PacketCodec {
 	}
 
 	public static String encodeLobbyAck(LobbyAck pk_data ){
-		String data = Packet.ADDFRIEND_ACK
+		String data = Packet.LOBBY_ACK
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getAnswer())
 				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getRoomNum())
 				+ Packet.FIELD_DELIM + pk_data.getRoomName()
 				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getFriendNum())
@@ -303,6 +308,11 @@ public class PacketCodec {
 		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
 		LobbyAck dst = new LobbyAck();
 
+		if(Packet.SUCCESS==s.nextInt())
+			dst.setAnswerOk();
+		else
+			dst.setAnswerFail();
+		s.skip(Packet.FIELD_DELIM);
 		dst.setRoomNum(s.nextInt());
 		s.skip(Packet.FIELD_DELIM);
 		dst.setRoomName(s.next());
@@ -314,7 +324,8 @@ public class PacketCodec {
 		return dst;
 	}
 	public static String encodeRoomReq(RoomReq pk_data){
-		String data = Packet.ADDFRIEND_REQ
+		String data = Packet.ROOM_REQ
+				+ Packet.FIELD_DELIM + pk_data.getRoomname()
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
 
@@ -324,11 +335,14 @@ public class PacketCodec {
 		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
 		RoomReq dst = new RoomReq();
 
+		dst.setRoomname(s.next());
+
 		return dst;
 	}
 
 	public static String encodeRoomAck(RoomAck pk_data ){
-		String data = Packet.ADDFRIEND_ACK
+		String data = Packet.ROOM_ACK
+				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getAnswer())
 				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getMauNum())
 				+ Packet.FIELD_DELIM + pk_data.getMau()
 				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getMemberNum())
@@ -342,6 +356,11 @@ public class PacketCodec {
 		Scanner s = new Scanner(pk_data).useDelimiter("\\"+Packet.FIELD_DELIM);
 		RoomAck dst = new RoomAck();
 
+		if(Packet.SUCCESS==s.nextInt())
+			dst.setAnswerOk();
+		else
+			dst.setAnswerFail();
+		s.skip(Packet.FIELD_DELIM);
 		dst.setMauNum(s.nextInt());
 		s.skip(Packet.FIELD_DELIM);
 		dst.setMau(s.next());
@@ -367,7 +386,7 @@ public class PacketCodec {
 		return dst;
 	}
 	public static String encodeGiveMemAck(GiveMemAck pk_data ){
-		String data = Packet.ADDFRIEND_ACK
+		String data = Packet.GIVEMEM_ACK
 				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getmemNum())
 				+ Packet.FIELD_DELIM + pk_data.getmemberName()
 				+ Packet.FIELD_DELIM + pk_data.getmemberId()
@@ -377,7 +396,7 @@ public class PacketCodec {
 		return data;
 	}
 
-	public static String preEncodeGiveMemAck(int num, String[] mem)
+	public static String preEncode(int num, String[] mem)
 	{
 		String send = "";
 		send += Integer.toString(num);
@@ -401,7 +420,7 @@ public class PacketCodec {
 		return dst;
 	}
 
-	public static String[] nextDecodeGiveMemAck(int num, String mem)
+	public static String[] nextDecode(int num, String mem)
 	{
 		String[] member = new String[num];
 		Scanner s = new Scanner(mem).useDelimiter(Packet.SMALLDELIM);
@@ -449,5 +468,24 @@ public class PacketCodec {
 
 		return dst;
 	}
-}
 
+	public static MssAndArrtimeAndUser[] nextTinydecode(int num,String[] arg)
+	{
+		MssAndArrtimeAndUser[] mau = new MssAndArrtimeAndUser[num];
+
+		for(int i =0 ;i<num;i++){
+			Scanner s = new Scanner(arg[i]).useDelimiter(Packet.TINYDELIM);
+			for(int j =0 ;j<3;j++){
+				mau[j].setName(s.next());
+				s.skip(Packet.TINYDELIM);
+				mau[j].setMss(s.next());
+				s.skip(Packet.TINYDELIM);
+				mau[j].setArrtime(s.next());
+				s.skip(Packet.TINYDELIM);
+			}
+		}
+
+		return mau;
+
+	}
+}
