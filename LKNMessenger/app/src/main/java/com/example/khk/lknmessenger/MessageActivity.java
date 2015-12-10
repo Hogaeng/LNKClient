@@ -74,8 +74,8 @@ public class MessageActivity extends Activity {
             public void run() {
                 super.run();
                 while (trd)
-
                 {
+                    mssReq.setMessage("");
                     sendMsg = PacketCodec.encodeMssReq(mssReq);
                     Log.e("sendMsg", sendMsg);
 
