@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.Executors;
 
 /**
@@ -128,11 +129,10 @@ public class MessageActivity extends Activity {
                         }
 
                     }
-                    for (int i = 0; i < mssAck.getListnum(); i++) {
-
-                        list.remove(i);
+                    for(Iterator<String> it = list.iterator() ; it.hasNext() ; )
+                    {
+                        it.remove();
                         arrAdapter.notifyDataSetChanged();
-                        //arrAdapter.add(mau[i].getMss());
                     }
 
                 }
@@ -194,8 +194,9 @@ public class MessageActivity extends Activity {
                             Log.e("arg[0]", arg[0]);
                             mau = PacketCodec.nextTinydecode(arg.length, arg);
                             for (int i = 0; i < mau.length; i++) {
-                                Log.e("Text", mau[i].getMss());
-                                arrAdapter.add(mau[i].getMss());
+                                list.add(mau[i].getMss());
+                                arrAdapter.notifyDataSetChanged();
+                                //arrAdapter.add(mau[i].getMss());
                             }
 
                         } else {
@@ -206,7 +207,11 @@ public class MessageActivity extends Activity {
 
                 }
 
-
+            for(Iterator<String> it = list.iterator() ; it.hasNext() ; )
+            {
+                it.remove();
+                arrAdapter.notifyDataSetChanged();
+            }
 
         }
     };
