@@ -39,7 +39,7 @@ public class MessageActivity extends Activity {
     private ArrayList<String> list = new ArrayList<String>() ;
     private Intent intent;
     boolean trd =true;
-
+    Thread thread;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.messagewindow);
@@ -72,7 +72,7 @@ public class MessageActivity extends Activity {
         mssReq = new MssReq();
         mssAck = new MssAck();
 
-        Thread thread = new Thread() {
+        thread = new Thread() {
             @Override
             public void run() {
                 super.run();
@@ -131,7 +131,7 @@ public class MessageActivity extends Activity {
                     }
                     for(Iterator<String> it = list.iterator() ; it.hasNext() ; )
                     {
-                        it.remove();
+                            it.remove();
                         arrAdapter.notifyDataSetChanged();
                     }
 
@@ -152,6 +152,7 @@ public class MessageActivity extends Activity {
     private View.OnClickListener OnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+                trd=false;
                 message = editText.getText().toString();
                 mssReq.setMessage(message);
                 sendMsg = PacketCodec.encodeMssReq(mssReq);
@@ -196,7 +197,6 @@ public class MessageActivity extends Activity {
                             for (int i = 0; i < mau.length; i++) {
                                 list.add(mau[i].getMss());
                                 arrAdapter.notifyDataSetChanged();
-                                //arrAdapter.add(mau[i].getMss());
                             }
 
                         } else {
@@ -213,6 +213,7 @@ public class MessageActivity extends Activity {
                 arrAdapter.notifyDataSetChanged();
             }
 
+            thread.start();
         }
     };
 }
