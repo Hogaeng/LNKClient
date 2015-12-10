@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,9 +35,9 @@ public class MessageActivity extends Activity {
     private Packet packet;
     private ArrayAdapter<String> arrAdapter ;
     private Intent intent;
+    boolean trd =true;
 
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.messagewindow);
 
@@ -44,12 +45,12 @@ public class MessageActivity extends Activity {
         intent = getIntent();
         Roomname = intent.getExtras().getString("Roomname");
         ID = intent.getExtras().getInt("RoomId");
-        Log.e("RoomId",String.valueOf(ID));
-        scrollView = (ScrollView)findViewById(R.id.scrollView);
+        Log.e("RoomId", String.valueOf(ID));
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
 
         arrAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.mylist);
-        listView = (ListView)findViewById(R.id.Message);
-        listView.setAdapter(arrAdapter) ;
+        listView = (ListView) findViewById(R.id.Message);
+        listView.setAdapter(arrAdapter);
 
         listView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -59,9 +60,8 @@ public class MessageActivity extends Activity {
             }
         });
 
-        Send = (Button)findViewById(R.id.Send);
-        editText = (EditText)findViewById(R.id.EditText);
-
+        Send = (Button) findViewById(R.id.Send);
+        editText = (EditText) findViewById(R.id.EditText);
 
 
         Send.setOnClickListener(OnClickListener);
@@ -73,7 +73,7 @@ public class MessageActivity extends Activity {
             @Override
             public void run() {
                 super.run();
-                while(true)
+                while (trd)
 
                 {
                     sendMsg = PacketCodec.encodeMssReq(mssReq);
@@ -98,9 +98,9 @@ public class MessageActivity extends Activity {
                     if (mssAck.getAnswer() == Packet.FAIL) {
                         AlertDialog.Builder dialog = new AlertDialog.Builder(MessageActivity.this);
                         dialog.setMessage("Please Input Correct Sentence");
-                        Log.e("Please","Please Input Correct Sentence");
+                        Log.e("Please", "Please Input Correct Sentence");
                         dialog.setPositiveButton("ok", null);
-                        Log.e("ok","ok");
+                        Log.e("ok", "ok");
                         dialog.show();
                     }                   //  if the ACK means login fail, create the alert dialog
 
@@ -112,7 +112,7 @@ public class MessageActivity extends Activity {
                         MssAndArrtimeAndUser[] mau;
                         if (mssAck.getListnum() > 0) {
                             arg = PacketCodec.nextDecode(mssAck.getListnum(), mssAck.getlist());
-                            Log.e("arg[0]",arg[0]);
+                            Log.e("arg[0]", arg[0]);
                             mau = PacketCodec.nextTinydecode(arg.length, arg);
                             for (int i = 0; i < mau.length; i++) {
                                 Log.e("Text", mau[i].getMss());
@@ -131,7 +131,14 @@ public class MessageActivity extends Activity {
             }
         };
         thread.start();
+    }
 
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        trd = false;
+        Debug.stopMethodTracing();
     }
 
     private View.OnClickListener OnClickListener = new View.OnClickListener() {
