@@ -35,7 +35,7 @@ public class MessageActivity extends Activity {
     private MssAck mssAck;
     private Packet packet;
     private ArrayAdapter<String> arrAdapter ;
-    private ArrayList<String> list ;
+    private ArrayList<String> list = new ArrayList<String>() ;
     private Intent intent;
     boolean trd =true;
 
