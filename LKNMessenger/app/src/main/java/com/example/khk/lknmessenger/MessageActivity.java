@@ -72,93 +72,22 @@ public class MessageActivity extends Activity {
         mssReq = new MssReq();
         mssAck = new MssAck();
 
-        thread = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                while (trd)
-                {
+
+
+
                     /*for(Iterator<String> it = list.iterator() ; it.hasNext() ; )
                     {
                         it.remove();
                         arrAdapter.notifyDataSetChanged();
                     }*/
-                    mssReq.setMessage("");
-                    sendMsg = PacketCodec.encodeMssReq(mssReq);
-                    Log.e("sendMsg", sendMsg);
 
-                    try {
-                        Log.e("2sendMsg", "Link Start!!"); //Toast.makeText(getBaseContext(),"Link Start!!",Toast.LENGTH_SHORT).show();
-                        SocketManager.sendMsg(sendMsg);
-                        Log.e("3sendMsg", sendMsg);
-
-                        recvMsg = SocketManager.receiveMsg();
-                        Log.e("recvMsg", recvMsg);
-                        packet = PacketCodec.decodeHeader(recvMsg);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-
-                    }
-
-                    mssAck = PacketCodec.decodeMssAck(packet.getData());
-
-                    //  analyzing the ACK sent from server
-                    if (mssAck.getAnswer() == Packet.FAIL) {
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(MessageActivity.this);
-                        dialog.setMessage("Please Input Correct Sentence");
-                        Log.e("Please", "Please Input Correct Sentence");
-                        dialog.setPositiveButton("ok", null);
-                        Log.e("ok", "ok");
-                        dialog.show();
-                    }                   //  if the ACK means login fail, create the alert dialog
-
-                    else if (mssAck.getAnswer() == Packet.SUCCESS) {
-                        if(!message.equals("")){
-                            String[] arg;
-                            MssAndArrtimeAndUser[] mau;
-                            if (mssAck.getListnum() > 0) {
-                                arg = PacketCodec.nextDecode(mssAck.getListnum(), mssAck.getlist());
-                                Log.e("arg[0]", arg[0]);
-                                mau = PacketCodec.nextTinydecode(arg.length, arg);
-                                for (int i = 0; i < mau.length; i++) {
-                                    Log.e("Text", mau[i].getMss());
-                                    list.add(mau[i].getMss());
-                                    arrAdapter.notifyDataSetChanged();
-                                    //arrAdapter.add(mau[i].getMss());
-                                }
-
-                            } else {
-                                Toast.makeText(getBaseContext(), "Send!", Toast.LENGTH_SHORT).show();
-                                Log.e("Sever", "Send!");
-                            }
-                        }
-
-                    }
-
-
-                }
-            }
-        };
-        thread.start();
     }
 
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        trd = false;
-        Debug.stopMethodTracing();
-    }
+
 
     private View.OnClickListener OnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-                trd=false;
-            for(Iterator<String> it = list.iterator() ; it.hasNext() ; )
-            {
-                it.remove();
-                arrAdapter.notifyDataSetChanged();
-            }
 
             message = editText.getText().toString();
                 mssReq.setMessage(message);
@@ -215,7 +144,6 @@ public class MessageActivity extends Activity {
                 }
 
 
-            thread.start();
         }
     };
 }
