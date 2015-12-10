@@ -28,7 +28,7 @@ public class MessageActivity extends Activity {
     private EditText editText;
     private ScrollView scrollView;
     private ListView listView;
-    private String message;
+    private String message="";
     private String sendMsg,recvMsg;
     private MssReq mssReq;
     private MssAck mssAck;
@@ -105,23 +105,26 @@ public class MessageActivity extends Activity {
                     }                   //  if the ACK means login fail, create the alert dialog
 
                     else if (mssAck.getAnswer() == Packet.SUCCESS) {
-                        arrAdapter.add(message);
-                        message = "";
-                        editText.setText("");
-                        String[] arg;
-                        MssAndArrtimeAndUser[] mau;
-                        if (mssAck.getListnum() > 0) {
-                            arg = PacketCodec.nextDecode(mssAck.getListnum(), mssAck.getlist());
-                            Log.e("arg[0]", arg[0]);
-                            mau = PacketCodec.nextTinydecode(arg.length, arg);
-                            for (int i = 0; i < mau.length; i++) {
-                                Log.e("Text", mau[i].getMss());
-                                arrAdapter.add(mau[i].getMss());
-                            }
+                        if(!message.equals("")) {
+                            arrAdapter.add(message);
 
-                        } else {
-                            Toast.makeText(getBaseContext(), "Send!", Toast.LENGTH_SHORT).show();
-                            Log.e("Sever", "Send!");
+                            message = "";
+                            editText.setText("");
+                            String[] arg;
+                            MssAndArrtimeAndUser[] mau;
+                            if (mssAck.getListnum() > 0) {
+                                arg = PacketCodec.nextDecode(mssAck.getListnum(), mssAck.getlist());
+                                Log.e("arg[0]", arg[0]);
+                                mau = PacketCodec.nextTinydecode(arg.length, arg);
+                                for (int i = 0; i < mau.length; i++) {
+                                    Log.e("Text", mau[i].getMss());
+                                    arrAdapter.add(mau[i].getMss());
+                                }
+
+                            } else {
+                                Toast.makeText(getBaseContext(), "Send!", Toast.LENGTH_SHORT).show();
+                                Log.e("Sever", "Send!");
+                            }
                         }
 
                     }
@@ -175,23 +178,25 @@ public class MessageActivity extends Activity {
                 }                   //  if the ACK means login fail, create the alert dialog
 
                 else if (mssAck.getAnswer() == Packet.SUCCESS) {
-                    arrAdapter.add(message);
-                    message = "";
-                    editText.setText("");
-                    String[] arg;
-                    MssAndArrtimeAndUser[] mau;
-                    if (mssAck.getListnum() > 0) {
-                        arg = PacketCodec.nextDecode(mssAck.getListnum(), mssAck.getlist());
-                        Log.e("arg[0]",arg[0]);
-                        mau = PacketCodec.nextTinydecode(arg.length, arg);
-                        for (int i = 0; i < mau.length; i++) {
-                            Log.e("Text", mau[i].getMss());
-                            arrAdapter.add(mau[i].getMss());
-                        }
+                    if(!message.equals("")) {
+                        arrAdapter.add(message);
+                        message = "";
+                        editText.setText("");
+                        String[] arg;
+                        MssAndArrtimeAndUser[] mau;
+                        if (mssAck.getListnum() > 0) {
+                            arg = PacketCodec.nextDecode(mssAck.getListnum(), mssAck.getlist());
+                            Log.e("arg[0]", arg[0]);
+                            mau = PacketCodec.nextTinydecode(arg.length, arg);
+                            for (int i = 0; i < mau.length; i++) {
+                                Log.e("Text", mau[i].getMss());
+                                arrAdapter.add(mau[i].getMss());
+                            }
 
-                    } else {
-                        Toast.makeText(getBaseContext(), "Send!", Toast.LENGTH_SHORT).show();
-                        Log.e("Sever", "Send!");
+                        } else {
+                            Toast.makeText(getBaseContext(), "Send!", Toast.LENGTH_SHORT).show();
+                            Log.e("Sever", "Send!");
+                        }
                     }
 
                 }
