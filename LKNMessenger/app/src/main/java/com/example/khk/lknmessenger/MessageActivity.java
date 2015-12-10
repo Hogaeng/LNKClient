@@ -124,7 +124,7 @@ public class MessageActivity extends Activity {
                         }
 
                     }
-
+                    listView.removeAllViews();
 
                 }
             }
