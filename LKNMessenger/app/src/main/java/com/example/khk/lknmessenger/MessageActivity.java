@@ -36,7 +36,7 @@ public class MessageActivity extends Activity {
     private MssAck mssAck;
     private Packet packet;
     private ArrayAdapter<String> arrAdapter ;
-    private ArrayList<String> list = new ArrayList<String>() ;
+    private ArrayList<String> list;
     private Intent intent;
     boolean trd =true;
     Thread thread;
@@ -50,7 +50,7 @@ public class MessageActivity extends Activity {
         ID = intent.getExtras().getInt("RoomId");
         Log.e("RoomId", String.valueOf(ID));
         scrollView = (ScrollView) findViewById(R.id.scrollView);
-
+        list = new ArrayList<String>() ;
         arrAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.mylist,list);
         listView = (ListView) findViewById(R.id.Message);
         listView.setAdapter(arrAdapter);
@@ -78,6 +78,11 @@ public class MessageActivity extends Activity {
                 super.run();
                 while (trd)
                 {
+                    for(Iterator<String> it = list.iterator() ; it.hasNext() ; )
+                    {
+                        it.remove();
+                        arrAdapter.notifyDataSetChanged();
+                    }
                     mssReq.setMessage("");
                     sendMsg = PacketCodec.encodeMssReq(mssReq);
                     Log.e("sendMsg", sendMsg);
@@ -129,11 +134,7 @@ public class MessageActivity extends Activity {
                         }
 
                     }
-                    for(Iterator<String> it = list.iterator() ; it.hasNext() ; )
-                    {
-                            it.remove();
-                        arrAdapter.notifyDataSetChanged();
-                    }
+
 
                 }
             }
@@ -153,7 +154,13 @@ public class MessageActivity extends Activity {
         @Override
         public void onClick(View v) {
                 trd=false;
-                message = editText.getText().toString();
+            for(Iterator<String> it = list.iterator() ; it.hasNext() ; )
+            {
+                it.remove();
+                arrAdapter.notifyDataSetChanged();
+            }
+
+            message = editText.getText().toString();
                 mssReq.setMessage(message);
                 sendMsg = PacketCodec.encodeMssReq(mssReq);
                 Log.e("sendMsg", sendMsg);
@@ -207,11 +214,6 @@ public class MessageActivity extends Activity {
 
                 }
 
-            for(Iterator<String> it = list.iterator() ; it.hasNext() ; )
-            {
-                it.remove();
-                arrAdapter.notifyDataSetChanged();
-            }
 
             thread.start();
         }
