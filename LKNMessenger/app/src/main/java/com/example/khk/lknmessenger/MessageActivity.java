@@ -105,11 +105,7 @@ public class MessageActivity extends Activity {
                     }                   //  if the ACK means login fail, create the alert dialog
 
                     else if (mssAck.getAnswer() == Packet.SUCCESS) {
-                        if(!message.equals("")) {
-                            arrAdapter.add(message);
-
-                            message = "";
-                            editText.setText("");
+                        if(!message.equals("")){
                             String[] arg;
                             MssAndArrtimeAndUser[] mau;
                             if (mssAck.getListnum() > 0) {
