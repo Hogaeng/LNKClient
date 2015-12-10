@@ -16,6 +16,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 /**
@@ -34,6 +35,7 @@ public class MessageActivity extends Activity {
     private MssAck mssAck;
     private Packet packet;
     private ArrayAdapter<String> arrAdapter ;
+    private ArrayList<String> list ;
     private Intent intent;
     boolean trd =true;
 
@@ -48,7 +50,7 @@ public class MessageActivity extends Activity {
         Log.e("RoomId", String.valueOf(ID));
         scrollView = (ScrollView) findViewById(R.id.scrollView);
 
-        arrAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.mylist);
+        arrAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.mylist,list);
         listView = (ListView) findViewById(R.id.Message);
         listView.setAdapter(arrAdapter);
 
@@ -114,7 +116,9 @@ public class MessageActivity extends Activity {
                                 mau = PacketCodec.nextTinydecode(arg.length, arg);
                                 for (int i = 0; i < mau.length; i++) {
                                     Log.e("Text", mau[i].getMss());
-                                    arrAdapter.add(mau[i].getMss());
+                                    list.add(mau[i].getMss());
+                                    arrAdapter.notifyDataSetChanged();
+                                    //arrAdapter.add(mau[i].getMss());
                                 }
 
                             } else {
@@ -124,7 +128,12 @@ public class MessageActivity extends Activity {
                         }
 
                     }
-                    listView.removeAllViews();
+                    for (int i = 0; i < mssAck.getListnum(); i++) {
+
+                        list.remove(i);
+                        arrAdapter.notifyDataSetChanged();
+                        //arrAdapter.add(mau[i].getMss());
+                    }
 
                 }
             }
