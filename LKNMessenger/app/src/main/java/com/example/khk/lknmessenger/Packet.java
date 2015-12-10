@@ -33,8 +33,8 @@ public class Packet {
 
 	public static final String FIELD_DELIM = "|";
 	public static final String PK_DELIM = "?";
-	public static final String SMALLDELIM = ":";
-	public static final String TINYDELIM = "'";
+	public static final String SMALLDELIM = "_";
+	public static final String TINYDELIM = "+";
 
 	public static final int SUCCESS = 0x01;
 	public static final int FAIL = 0x00;

@@ -1,6 +1,8 @@
 package com.example.khk.lknmessenger;
 
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -433,7 +435,7 @@ public class PacketCodec {
 	public static String[] nextDecode(int num, String mem)
 	{
 		String[] member = new String[num];
-		Scanner s = new Scanner(mem).useDelimiter(Packet.SMALLDELIM);
+		Scanner s = new Scanner(mem).useDelimiter("\\"+Packet.SMALLDELIM);
 
 		for(int i =0 ;i<num;i++){
 			member[i] = s.next();
@@ -482,17 +484,23 @@ public class PacketCodec {
 	public static MssAndArrtimeAndUser[] nextTinydecode(int num,String[] arg)
 	{
 		MssAndArrtimeAndUser[] mau = new MssAndArrtimeAndUser[num];
+		for(int i =0 ;i<num;i++) {
+			mau[i] = new MssAndArrtimeAndUser();
+		}
 
 		for(int i =0 ;i<num;i++){
-			Scanner s = new Scanner(arg[i]).useDelimiter(Packet.TINYDELIM);
-			for(int j =0 ;j<3;j++){
-				mau[j].setName(s.next());
-				s.skip(Packet.TINYDELIM);
-				mau[j].setMss(s.next());
-				s.skip(Packet.TINYDELIM);
-				mau[j].setArrtime(s.next());
-				s.skip(Packet.TINYDELIM);
-			}
+			Log.e("arg[0] nextTimydecode", arg[0]);
+			Log.e("arg[0] nextTimydecode", String.valueOf(arg[0].charAt(0)));
+
+			Scanner s = new Scanner(arg[i]).useDelimiter("\\"+Packet.TINYDELIM);
+			//Log.e("arg[0] nextTimydecode", s.next());
+			Log.e("num",String.valueOf(i));
+			mau[i].setName(s.next());
+			s.skip("\\"+Packet.TINYDELIM);
+			mau[i].setMss(s.next());
+			s.skip("\\"+Packet.TINYDELIM);
+			mau[i].setArrtime(s.next());
+			s.skip("\\"+Packet.TINYDELIM);
 		}
 
 		return mau;
