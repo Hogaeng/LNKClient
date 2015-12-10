@@ -20,7 +20,8 @@ import java.io.IOException;
  * Created by KHK on 2015-12-06.
  */
 public class MessageActivity extends Activity {
-
+    private String Roomname;
+    private int ID;
     private Button Send;
     private EditText editText;
     private ScrollView scrollView;
@@ -31,10 +32,16 @@ public class MessageActivity extends Activity {
     private MssAck mssAck;
     private Packet packet;
     private ArrayAdapter<String> arrAdapter ;
+    private Intent intent;
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.messagewindow);
+
+
+        intent = getIntent();
+        Roomname = intent.getExtras().getString("Roomname");
+        ID = intent.getExtras().getInt("RoomId");
         scrollView = (ScrollView)findViewById(R.id.scrollView);
 
         arrAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.mylist);
@@ -86,6 +93,7 @@ public class MessageActivity extends Activity {
             }
 
             mssAck = PacketCodec.decodeMssAck(packet.getData());
+
             //  analyzing the ACK sent from server
             if( mssAck.getAnswer() == Packet.FAIL ) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder( MessageActivity.this );
@@ -100,10 +108,20 @@ public class MessageActivity extends Activity {
                     editText.setText("");
                     String[] arg;
                     MssAndArrtimeAndUser[] mau;
-                    arg = PacketCodec.nextDecode(mssAck.getListnum(),mssAck.getlist());
-                    mau = PacketCodec.nextTinydecode(arg.length,arg);
-                    for(int i = 0; i<mau.length;i++)
-                    arrAdapter.add(mau[i].getMss());
+                    if(mssAck.getListnum() > 0) {
+                        arg = PacketCodec.nextDecode(mssAck.getListnum(), mssAck.getlist());
+                        mau = PacketCodec.nextTinydecode(arg.length, arg);
+                        for(int i = 0; i<mau.length;i++) {
+                            Log.e("Text", mau[i].getMss());
+                            arrAdapter.add(mau[i].getMss());
+                        }
+
+                    }
+                else {
+                        Toast.makeText(getBaseContext(), "Send!", Toast.LENGTH_SHORT).show();
+                        Log.e("Sever","Send!");
+                    }
+
             }
 
         }

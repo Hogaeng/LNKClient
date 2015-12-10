@@ -155,6 +155,7 @@ public class PacketCodec {
 		String data = Packet.MSS_ACK
 				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getAnswer())
 				+ Packet.FIELD_DELIM + pk_data.getArrtime()
+				+ Packet.FIELD_DELIM + pk_data.getListnum()
 				+ Packet.FIELD_DELIM + pk_data.getlist()
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
@@ -172,6 +173,13 @@ public class PacketCodec {
 
 		s.skip(Packet.FIELD_DELIM);
 		dst.setArrtime(s.next());
+		s.skip(Packet.FIELD_DELIM);
+		dst.setListNum(s.nextInt());
+		if(dst.getListnum()<1)
+		{
+			dst.setlist(null);
+			return dst;
+		}
 		s.skip(Packet.FIELD_DELIM);
 		dst.setlist(s.next());
 
@@ -215,6 +223,7 @@ public class PacketCodec {
 	public static String encodeMakeRoomReq(MakeRoomReq pk_data){
 		String data = Packet.MAKEROOM_REQ
 				+ Packet.FIELD_DELIM + pk_data.getRoomName()
+				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
 
 		return data;
@@ -248,8 +257,8 @@ public class PacketCodec {
 	public static String encodeAddFriendReq(AddFriendReq pk_data){
 		String data = Packet.ADDFRIEND_REQ
 				+ Packet.FIELD_DELIM + pk_data.getFriendName()
+				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
-
 		return data;
 	}
 	public static AddFriendReq decodeAddFriendReq(String pk_data){
@@ -434,7 +443,7 @@ public class PacketCodec {
 	}
 
 	public static String encodeEnterroomReq(EnterroomReq pk_data){
-		String data = Packet.INVIROOM_REQ
+		String data = Packet.ENTERROOM_REQ
 				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getRoomid())
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;
@@ -451,7 +460,7 @@ public class PacketCodec {
 	}
 
 	public static String encodeEnterroomAck(EnterroomAck pk_data ){
-		String data = Packet.INVIROOM_ACK
+		String data = Packet.ENTERROOM_ACK
 				+ Packet.FIELD_DELIM + Integer.toString(pk_data.getAnswer())
 				+ Packet.FIELD_DELIM
 				+ Packet.PK_DELIM;

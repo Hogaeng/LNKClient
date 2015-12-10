@@ -103,6 +103,7 @@ public class LoginActivity extends Activity{
                         else if( loginAck.getAnswer() == Packet.SUCCESS ) {
                             Toast.makeText(getBaseContext(),"Login Successful!",Toast.LENGTH_SHORT).show();
                             intent = new Intent( LoginActivity.this, LobbyActivity.class );
+                            intent.putExtra("UserID",UserID);
                             startActivity(intent);
 
                         }
