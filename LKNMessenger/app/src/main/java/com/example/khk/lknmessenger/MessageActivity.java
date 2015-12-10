@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
 
 /**
  * Created by KHK on 2015-12-06.
@@ -68,6 +69,23 @@ public class MessageActivity extends Activity {
         mssReq = new MssReq();
         mssAck = new MssAck();
 
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                while(true)
+
+                {
+                    sendMsg = PacketCodec.encodeMssReq(mssReq);
+                    try {
+                        SocketManager.sendMsg(sendMsg);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        thread.start();
 
     }
 
@@ -89,6 +107,7 @@ public class MessageActivity extends Activity {
                     packet = PacketCodec.decodeHeader(recvMsg);
                 } catch (IOException e) {
                     e.printStackTrace();
+
                 }
 
                 mssAck = PacketCodec.decodeMssAck(packet.getData());
