@@ -78,11 +78,11 @@ public class MessageActivity extends Activity {
                 super.run();
                 while (trd)
                 {
-                    for(Iterator<String> it = list.iterator() ; it.hasNext() ; )
+                    /*for(Iterator<String> it = list.iterator() ; it.hasNext() ; )
                     {
                         it.remove();
                         arrAdapter.notifyDataSetChanged();
-                    }
+                    }*/
                     mssReq.setMessage("");
                     sendMsg = PacketCodec.encodeMssReq(mssReq);
                     Log.e("sendMsg", sendMsg);
